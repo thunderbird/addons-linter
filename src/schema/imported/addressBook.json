@@ -1,0 +1,238 @@
+{
+  "id": "addressBooks",
+  "permissions": [
+    "addressBooks"
+  ],
+  "functions": [
+    {
+      "name": "openUI",
+      "type": "function",
+      "async": true,
+      "description": "Opens the address book user interface.",
+      "parameters": []
+    },
+    {
+      "name": "closeUI",
+      "type": "function",
+      "async": true,
+      "description": "Closes the address book user interface.",
+      "parameters": []
+    },
+    {
+      "name": "list",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "complete",
+          "type": "boolean",
+          "optional": true,
+          "default": false,
+          "description": "If set to true, results will include contacts and mailing lists for each address book."
+        }
+      ],
+      "description": "Gets a list of the user's address books, optionally including all contacts and mailing lists."
+    },
+    {
+      "name": "get",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "complete",
+          "type": "boolean",
+          "optional": true,
+          "default": false,
+          "description": "If set to true, results will include contacts and mailing lists for this address book."
+        }
+      ],
+      "description": "Gets a single address book, optionally including all contacts and mailing lists."
+    },
+    {
+      "name": "create",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "properties",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      ],
+      "description": "Creates a new, empty address book."
+    },
+    {
+      "name": "update",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "properties",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      ],
+      "description": "Renames an address book."
+    },
+    {
+      "name": "delete",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "description": "Removes an address book, and all associated contacts and mailing lists."
+    }
+  ],
+  "events": [
+    {
+      "name": "onCreated",
+      "type": "function",
+      "description": "Fired when an address book is created.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/AddressBookNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onUpdated",
+      "type": "function",
+      "description": "Fired when an address book is renamed.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/AddressBookNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onDeleted",
+      "type": "function",
+      "description": "Fired when an addressBook is deleted.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "addressBooks"
+          ]
+        }
+      ]
+    }
+  },
+  "refs": {
+    "addressBooks#/definitions/OptionalPermission": {
+      "namespace": "manifest",
+      "type": "OptionalPermission"
+    }
+  },
+  "types": {
+    "NodeType": {
+      "type": "string",
+      "enum": [
+        "addressBook",
+        "contact",
+        "mailingList"
+      ],
+      "description": "Indicates the type of a Node, which can be one of <code>addressBook</code>, <code>contact</code>, or <code>mailingList</code>."
+    },
+    "AddressBookNode": {
+      "type": "object",
+      "description": "A node representing an address book.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the program is restarted."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "The <code>id</code> of the parent object."
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/types/NodeType"
+            },
+            {
+              "description": "Always set to <code>addressBook</code>."
+            }
+          ]
+        },
+        "readOnly": {
+          "type": "boolean",
+          "description": "Indicates if the object is read-only. Currently this returns false in all cases, as read-only address books are ignored by the API."
+        },
+        "name": {
+          "type": "string"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "contacts#/types/ContactNode"
+          },
+          "description": "A list of contacts held by this node's address book or mailing list."
+        },
+        "mailingLists": {
+          "type": "array",
+          "items": {
+            "$ref": "mailingLists#/types/MailingListNode"
+          },
+          "description": "A list of mailingLists in this node's address book."
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name"
+      ]
+    }
+  }
+}

@@ -121,7 +121,7 @@ export const UNSUPPORTED_API = {
   code: 'UNSUPPORTED_API',
   message: null,
   messageFormat: i18n._('{{api}} is not supported'),
-  description: i18n._('This API has not been implemented by Firefox.'),
+  description: i18n._('This API has not been implemented by Thunderbird.'),
 };
 
 function deprecatedAPI(api) {
@@ -129,7 +129,7 @@ function deprecatedAPI(api) {
     code: apiToMessage(api),
     message: i18n._(`"${api}" is deprecated or unimplemented`),
     description: i18n._(oneLine`This API has been deprecated by Chrome
-      and has not been implemented by Firefox.`),
+      and has not been implemented by Thunderbird.`),
   };
 }
 
@@ -150,7 +150,7 @@ function temporaryAPI(api) {
     code: apiToMessage(api),
     message: i18n._(`"${api}" can cause issues when loaded temporarily`),
     description: i18n._(oneLine`This API can cause issues when loaded
-      temporarily using about:debugging in Firefox unless you specify
+      temporarily using about:debugging in Thunderbird unless you specify
       applications|browser_specific_settings > gecko > id in the manifest.
       Please see: https://mzl.la/2hizK4a for more.`),
   };
@@ -164,10 +164,10 @@ export const INCOMPATIBLE_API = {
   code: 'INCOMPATIBLE_API',
   message: null,
   messageFormat: i18n._(
-    '{{api}} is not supported in Firefox version {{minVersion}}'
+    '{{api}} is not supported in Thunderbird version {{minVersion}}'
   ),
   description: i18n._(
-    'This API is not implemented by the given minimum Firefox version'
+    'This API is not implemented by the given minimum Thunderbird version'
   ),
 };
 

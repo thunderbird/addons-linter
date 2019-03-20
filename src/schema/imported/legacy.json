@@ -1,0 +1,45 @@
+{
+  "id": "legacy",
+  "definitions": {
+    "WebExtensionManifest": {
+      "properties": {
+        "legacy": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "options": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "string"
+                    },
+                    "open_in_tab": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "page"
+                  ]
+                }
+              },
+              "required": [
+                "options"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "refs": {
+    "legacy#/definitions/WebExtensionManifest": {
+      "namespace": "manifest",
+      "type": "WebExtensionManifest"
+    }
+  },
+  "types": {}
+}

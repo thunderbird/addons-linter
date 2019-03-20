@@ -30,7 +30,7 @@ const UNRECOGNIZED_PROPERTY_REFS = [
 ];
 
 const schemaRegexes = [
-  new RegExp('browser/components/extensions/schemas/.*\\.json'),
+  new RegExp('comm/mail/components/extensions/schemas/.*\\.json'),
   new RegExp('toolkit/components/extensions/schemas/.*\\.json'),
 ];
 

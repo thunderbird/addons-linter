@@ -186,7 +186,7 @@ export const validateDictionary = (...args) => {
 
 const _validateLocaleMessages = validator.compile({
   ...messagesSchemaObject,
-  id: 'messages',
+  id: 'L10n_messages',
   $ref: '#/types/WebExtensionMessages',
 });
 

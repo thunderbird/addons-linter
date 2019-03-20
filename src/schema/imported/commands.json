@@ -123,8 +123,7 @@
                 }
               },
               "description": {
-                "type": "string",
-                "preprocess": "localize"
+                "type": "string"
               }
             }
           }

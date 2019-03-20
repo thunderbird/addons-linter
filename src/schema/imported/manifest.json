@@ -244,13 +244,13 @@
           "$ref": "browserAction#/definitions/WebExtensionManifest"
         },
         {
-          "$ref": "chrome_settings_overrides#/definitions/WebExtensionManifest"
+          "$ref": "cloudFile#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "commands#/definitions/WebExtensionManifest"
         },
         {
-          "$ref": "devtools#/definitions/WebExtensionManifest"
+          "$ref": "composeAction#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "experiments#/definitions/WebExtensionManifest"
@@ -262,19 +262,10 @@
           "$ref": "i18n#/definitions/WebExtensionManifest"
         },
         {
-          "$ref": "omnibox#/definitions/WebExtensionManifest"
-        },
-        {
-          "$ref": "pageAction#/definitions/WebExtensionManifest"
-        },
-        {
-          "$ref": "sidebarAction#/definitions/WebExtensionManifest"
+          "$ref": "legacy#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "theme#/definitions/WebExtensionManifest"
-        },
-        {
-          "$ref": "url_overrides#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "userScripts#/definitions/WebExtensionManifest"
@@ -445,7 +436,10 @@
           ]
         },
         {
-          "$ref": "bookmarks#/definitions/OptionalPermission"
+          "$ref": "accounts#/definitions/OptionalPermission"
+        },
+        {
+          "$ref": "addressBooks#/definitions/OptionalPermission"
         },
         {
           "$ref": "browserSettings#/definitions/OptionalPermission"
@@ -457,16 +451,10 @@
           "$ref": "downloads#/definitions/OptionalPermission"
         },
         {
-          "$ref": "find#/definitions/OptionalPermission"
-        },
-        {
-          "$ref": "history#/definitions/OptionalPermission"
-        },
-        {
           "$ref": "menus#/definitions/OptionalPermission"
         },
         {
-          "$ref": "search#/definitions/OptionalPermission"
+          "$ref": "messages#/definitions/OptionalPermission"
         },
         {
           "$ref": "tabs#/definitions/OptionalPermission"
@@ -507,22 +495,13 @@
           ]
         },
         {
-          "$ref": "browsingData#/definitions/Permission"
-        },
-        {
           "$ref": "contextualIdentities#/definitions/Permission"
-        },
-        {
-          "$ref": "devtools#/definitions/Permission"
         },
         {
           "$ref": "dns#/definitions/Permission"
         },
         {
           "$ref": "experiments#/definitions/Permission"
-        },
-        {
-          "$ref": "geckoProfiler#/definitions/Permission"
         },
         {
           "$ref": "identity#/definitions/Permission"
@@ -544,9 +523,6 @@
         },
         {
           "$ref": "runtime#/definitions/Permission"
-        },
-        {
-          "$ref": "sessions#/definitions/Permission"
         },
         {
           "$ref": "telemetry#/definitions/Permission"

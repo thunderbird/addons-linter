@@ -91,7 +91,7 @@ export const PROP_VERSION_INVALID = {
 
 export const PROP_VERSION_TOOLKIT_ONLY = {
   code: 'PROP_VERSION_TOOLKIT_ONLY',
-  message: i18n._('The "version" property uses a Firefox-specific format.'),
+  message: i18n._('The "version" property uses a Thunderbird-specific format.'),
   description: i18n._(
     'See http://mzl.la/1kXIADa (MDN Docs) for more information.'
   ),
@@ -110,8 +110,8 @@ export const MANIFEST_UPDATE_URL = {
 
 export const MANIFEST_UNUSED_UPDATE = {
   code: 'MANIFEST_UNUSED_UPDATE',
-  message: i18n._('The "update_url" property is not used by Firefox.'),
-  description: i18n._(oneLine`The "update_url" is not used by Firefox in
+  message: i18n._('The "update_url" property is not used by Thunderbird.'),
+  description: i18n._(oneLine`The "update_url" is not used by Thunderbird in
     the root of a manifest; your add-on will be updated via the Add-ons
     site and not your "update_url". See: https://mzl.la/25zqk4O`),
   file: MANIFEST_JSON,
@@ -121,7 +121,7 @@ export const STRICT_MAX_VERSION = {
   code: 'STRICT_MAX_VERSION',
   message: i18n._('"strict_max_version" not required.'),
   description: i18n._(oneLine`"strict_max_version" shouldn't be used unless
-    the add-on is expected not to work with future versions of Firefox.`),
+    the add-on is expected not to work with future versions of Thunderbird.`),
   file: MANIFEST_JSON,
 };
 
@@ -438,10 +438,10 @@ export function keyFirefoxUnsupportedByMinVersion(
   return {
     code: KEY_FIREFOX_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Manifest key not supported by the specified minimum Firefox version'
+      'Manifest key not supported by the specified minimum Thunderbird version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox %(minVersion)s, which
+      i18n._(oneLine`"strict_min_version" requires Thunderbird %(minVersion)s, which
         was released before version %(versionAdded)s introduced support for
         "%(key)s".`),
       { key, minVersion, versionAdded }
@@ -460,10 +460,10 @@ export function permissionFirefoxUnsupportedByMinVersion(
   return {
     code: PERMISSION_FIREFOX_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Permission not supported by the specified minimum Firefox version'
+      'Permission not supported by the specified minimum Thunderbird version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox %(minVersion)s, which
+      i18n._(oneLine`"strict_min_version" requires Thunderbird %(minVersion)s, which
         was released before version %(versionAdded)s introduced support for
         "%(key)s".`),
       { key, minVersion, versionAdded }
@@ -482,10 +482,10 @@ export function keyFirefoxAndroidUnsupportedByMinVersion(
   return {
     code: KEY_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Manifest key not supported by the specified minimum Firefox for Android version'
+      'Manifest key not supported by the specified minimum Thunderbird for Android version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox for Android
+      i18n._(oneLine`"strict_min_version" requires Thunderbird for Android
         %(minVersion)s, which was released before version %(versionAdded)s
         introduced support for "%(key)s".`),
       { key, minVersion, versionAdded }
@@ -504,10 +504,10 @@ export function permissionFirefoxAndroidUnsupportedByMinVersion(
   return {
     code: PERMISSION_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Permission not supported by the specified minimum Firefox for Android version'
+      'Permission not supported by the specified minimum Thunderbird for Android version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox for Android
+      i18n._(oneLine`"strict_min_version" requires Thunderbird for Android
         %(minVersion)s, which was released before version %(versionAdded)s
         introduced support for "%(key)s".`),
       { key, minVersion, versionAdded }

@@ -77,7 +77,7 @@ export const ALREADY_SIGNED = {
 
 export const COINMINER_USAGE_DETECTED = {
   code: 'COINMINER_USAGE_DETECTED',
-  message: i18n._('Firefox add-ons are not allowed to run coin miners.'),
+  message: i18n._('Thunderbird add-ons are not allowed to run coin miners.'),
   description: i18n._(oneLine`We do not allow coinminer scripts to be run inside
     WebExtensions.
     See https://github.com/mozilla/addons-linter/issues/1643 for more

@@ -1,0 +1,274 @@
+{
+  "id": "contacts",
+  "permissions": [
+    "addressBooks"
+  ],
+  "functions": [
+    {
+      "name": "list",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        }
+      ],
+      "description": "Gets all the contacts in the address book with the id <code>parentId</code>."
+    },
+    {
+      "name": "get",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "description": "Gets a single contact."
+    },
+    {
+      "name": "create",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactProperties"
+            },
+            {
+              "name": "properties"
+            }
+          ]
+        }
+      ],
+      "description": "Adds a new contact to the address book with the id <code>parentId</code>."
+    },
+    {
+      "name": "update",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactProperties"
+            },
+            {
+              "name": "properties"
+            }
+          ]
+        }
+      ],
+      "description": "Edits the properties of a contact. To remove a property, specify it as <code>null</code>."
+    },
+    {
+      "name": "delete",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "description": "Removes a contact from the address book. The contact is also removed from any mailing lists it is a member of."
+    }
+  ],
+  "events": [
+    {
+      "name": "onCreated",
+      "type": "function",
+      "description": "Fired when a contact is created.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        },
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "onUpdated",
+      "type": "function",
+      "description": "Fired when a contact is changed.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onDeleted",
+      "type": "function",
+      "description": "Fired when a contact is removed from an address book.",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "addressBooks"
+          ]
+        }
+      ]
+    }
+  },
+  "refs": {
+    "contacts#/definitions/OptionalPermission": {
+      "namespace": "manifest",
+      "type": "OptionalPermission"
+    }
+  },
+  "types": {
+    "ContactNode": {
+      "type": "object",
+      "description": "A node representing a contact in an address book.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the program is restarted."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "The <code>id</code> of the parent object."
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "addressBooks#/types/NodeType"
+            },
+            {
+              "description": "Always set to <code>contact</code>."
+            }
+          ]
+        },
+        "readOnly": {
+          "type": "boolean",
+          "description": "Indicates if the object is read-only. Currently this returns false in all cases, as read-only address books are ignored by the API."
+        },
+        "properties": {
+          "$ref": "#/types/ContactProperties"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "properties"
+      ]
+    },
+    "ContactProperties": {
+      "type": "object",
+      "description": "A set of properties for a particular contact. For a complete list of properties that Thunderbird uses, see https://hg.mozilla.org/comm-central/file/tip/mailnews/addrbook/public/nsIAbCard.idl\nIt is also possible to store custom properties. The custom property name however may only use a to z, A to Z, 1 to 9 and underscores.",
+      "patternProperties": {
+        "^\\w+$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "NodeType": {
+      "type": "string",
+      "enum": [
+        "addressBook",
+        "contact",
+        "mailingList"
+      ],
+      "description": "Indicates the type of a Node, which can be one of <code>addressBook</code>, <code>contact</code>, or <code>mailingList</code>."
+    },
+    "AddressBookNode": {
+      "type": "object",
+      "description": "A node representing an address book.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the program is restarted."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "The <code>id</code> of the parent object."
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/types/NodeType"
+            },
+            {
+              "description": "Always set to <code>addressBook</code>."
+            }
+          ]
+        },
+        "readOnly": {
+          "type": "boolean",
+          "description": "Indicates if the object is read-only. Currently this returns false in all cases, as read-only address books are ignored by the API."
+        },
+        "name": {
+          "type": "string"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "contacts#/types/ContactNode"
+          },
+          "description": "A list of contacts held by this node's address book or mailing list."
+        },
+        "mailingLists": {
+          "type": "array",
+          "items": {
+            "$ref": "mailingLists#/types/MailingListNode"
+          },
+          "description": "A list of mailingLists in this node's address book."
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name"
+      ]
+    }
+  }
+}

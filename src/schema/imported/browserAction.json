@@ -1,6 +1,6 @@
 {
   "id": "browserAction",
-  "description": "Use browser actions to put icons in the main browser toolbar, to the right of the address bar. In addition to its icon, a browser action can also have a tooltip, a badge, and a popup.",
+  "description": "Use toolbar actions to put icons in the mail window toolbar. In addition to its icon, a toolbar action can also have a tooltip, a badge, and a popup. This namespace is called browserAction for compatibility with browser WebExtensions.",
   "permissions": [
     "manifest:browser_action"
   ],
@@ -8,7 +8,7 @@
     {
       "name": "setTitle",
       "type": "function",
-      "description": "Sets the title of the browser action. This shows up in the tooltip.",
+      "description": "Sets the title of the toolbar action. This shows up in the tooltip.",
       "async": "callback",
       "parameters": [
         {
@@ -29,7 +29,7 @@
                       "type": "null"
                     }
                   ],
-                  "description": "The string the browser action should display when moused over."
+                  "description": "The string the toolbar action should display when moused over."
                 }
               },
               "required": [
@@ -49,7 +49,7 @@
     {
       "name": "getTitle",
       "type": "function",
-      "description": "Gets the title of the browser action.",
+      "description": "Gets the title of the toolbar action.",
       "async": "callback",
       "parameters": [
         {
@@ -77,7 +77,7 @@
     {
       "name": "setIcon",
       "type": "function",
-      "description": "Sets the icon for the browser action. The icon can be specified either as the path to an image file or as the pixel data from a canvas element, or as dictionary of either one of those. Either the <b>path</b> or the <b>imageData</b> property must be specified.",
+      "description": "Sets the icon for the toolbar action. The icon can be specified either as the path to an image file or as the pixel data from a canvas element, or as dictionary of either one of those. Either the <b>path</b> or the <b>imageData</b> property must be specified.",
       "async": "callback",
       "parameters": [
         {
@@ -136,7 +136,7 @@
     {
       "name": "setPopup",
       "type": "function",
-      "description": "Sets the html document to be opened as a popup when the user clicks on the browser action's icon.",
+      "description": "Sets the html document to be opened as a popup when the user clicks on the toolbar action's icon.",
       "async": "callback",
       "parameters": [
         {
@@ -177,7 +177,7 @@
     {
       "name": "getPopup",
       "type": "function",
-      "description": "Gets the html document set as the popup for this browser action.",
+      "description": "Gets the html document set as the popup for this toolbar action.",
       "async": "callback",
       "parameters": [
         {
@@ -205,7 +205,7 @@
     {
       "name": "setBadgeText",
       "type": "function",
-      "description": "Sets the badge text for the browser action. The badge is displayed on top of the icon.",
+      "description": "Sets the badge text for the toolbar action. The badge is displayed on top of the icon.",
       "async": "callback",
       "parameters": [
         {
@@ -246,7 +246,7 @@
     {
       "name": "getBadgeText",
       "type": "function",
-      "description": "Gets the badge text of the browser action. If no tab nor window is specified is specified, the global badge text is returned.",
+      "description": "Gets the badge text of the toolbar action. If no tab nor window is specified is specified, the global badge text is returned.",
       "async": "callback",
       "parameters": [
         {
@@ -287,7 +287,18 @@
               "type": "object",
               "properties": {
                 "color": {
-                  "$ref": "#/types/ColorValue"
+                  "description": "An array of four integers in the range [0,255] that make up the RGBA color of the badge. For example, opaque red is <code>[255, 0, 0, 255]</code>. Can also be a string with a CSS value, with opaque red being <code>#FF0000</code> or <code>#F00</code>.",
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "$ref": "#/types/ColorArray"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 }
               },
               "required": [
@@ -307,7 +318,7 @@
     {
       "name": "getBadgeBackgroundColor",
       "type": "function",
-      "description": "Gets the background color of the browser action badge.",
+      "description": "Gets the background color of the toolbar action.",
       "async": "callback",
       "parameters": [
         {
@@ -339,54 +350,9 @@
       ]
     },
     {
-      "name": "setBadgeTextColor",
-      "type": "function",
-      "description": "Sets the text color for the badge.",
-      "async": true,
-      "parameters": [
-        {
-          "$merge": {
-            "source": {
-              "$ref": "browserAction#/types/Details"
-            },
-            "with": {
-              "name": "details",
-              "type": "object",
-              "properties": {
-                "color": {
-                  "$ref": "#/types/ColorValue"
-                }
-              },
-              "required": [
-                "color"
-              ]
-            }
-          }
-        }
-      ]
-    },
-    {
-      "name": "getBadgeTextColor",
-      "type": "function",
-      "description": "Gets the text color of the browser action badge.",
-      "async": true,
-      "parameters": [
-        {
-          "allOf": [
-            {
-              "$ref": "#/types/Details"
-            },
-            {
-              "name": "details"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "enable",
       "type": "function",
-      "description": "Enables the browser action for a tab. By default, browser actions are enabled.",
+      "description": "Enables the toolbar action for a tab. By default, toolbar actions are enabled.",
       "async": "callback",
       "parameters": [
         {
@@ -394,7 +360,7 @@
           "optional": true,
           "name": "tabId",
           "minimum": 0,
-          "description": "The id of the tab for which you want to modify the browser action."
+          "description": "The id of the tab for which you want to modify the toolbar action."
         },
         {
           "type": "function",
@@ -407,7 +373,7 @@
     {
       "name": "disable",
       "type": "function",
-      "description": "Disables the browser action for a tab.",
+      "description": "Disables the toolbar action for a tab.",
       "async": "callback",
       "parameters": [
         {
@@ -415,7 +381,7 @@
           "optional": true,
           "name": "tabId",
           "minimum": 0,
-          "description": "The id of the tab for which you want to modify the browser action."
+          "description": "The id of the tab for which you want to modify the toolbar action."
         },
         {
           "type": "function",
@@ -428,7 +394,7 @@
     {
       "name": "isEnabled",
       "type": "function",
-      "description": "Checks whether the browser action is enabled.",
+      "description": "Checks whether the toolbar action is enabled.",
       "async": true,
       "parameters": [
         {
@@ -456,19 +422,8 @@
     {
       "name": "onClicked",
       "type": "function",
-      "description": "Fired when a browser action icon is clicked.  This event will not fire if the browser action has a popup.",
-      "parameters": [
-        {
-          "allOf": [
-            {
-              "$ref": "tabs#/types/Tab"
-            },
-            {
-              "name": "tab"
-            }
-          ]
-        }
-      ]
+      "description": "Fired when a toolbar action icon is clicked.  This event will not fire if the toolbar action has a popup.",
+      "parameters": []
     }
   ],
   "definitions": {
@@ -502,14 +457,8 @@
               "default": false
             },
             "default_area": {
-              "description": "Defines the location the browserAction will appear by default.  The default location is navbar.",
-              "type": "string",
-              "enum": [
-                "navbar",
-                "menupanel",
-                "tabstrip",
-                "personaltoolbar"
-              ]
+              "description": "Currently unused.",
+              "type": "string"
             }
           }
         }
@@ -555,20 +504,6 @@
       "additionalProperties": {},
       "postprocess": "convertImageDataToURL",
       "description": "Pixel data for an image. Must be an ImageData object (for example, from a <code>canvas</code> element)."
-    },
-    "ColorValue": {
-      "description": "An array of four integers in the range [0,255] that make up the RGBA color of the badge. For example, opaque red is <code>[255, 0, 0, 255]</code>. Can also be a string with a CSS value, with opaque red being <code>#FF0000</code> or <code>#F00</code>.",
-      "anyOf": [
-        {
-          "type": "string"
-        },
-        {
-          "$ref": "#/types/ColorArray"
-        },
-        {
-          "type": "null"
-        }
-      ]
     }
   }
 }
