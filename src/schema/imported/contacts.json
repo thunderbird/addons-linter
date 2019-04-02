@@ -210,65 +210,6 @@
           ]
         }
       }
-    },
-    "NodeType": {
-      "type": "string",
-      "enum": [
-        "addressBook",
-        "contact",
-        "mailingList"
-      ],
-      "description": "Indicates the type of a Node, which can be one of <code>addressBook</code>, <code>contact</code>, or <code>mailingList</code>."
-    },
-    "AddressBookNode": {
-      "type": "object",
-      "description": "A node representing an address book.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the program is restarted."
-        },
-        "parentId": {
-          "type": "string",
-          "description": "The <code>id</code> of the parent object."
-        },
-        "type": {
-          "allOf": [
-            {
-              "$ref": "#/types/NodeType"
-            },
-            {
-              "description": "Always set to <code>addressBook</code>."
-            }
-          ]
-        },
-        "readOnly": {
-          "type": "boolean",
-          "description": "Indicates if the object is read-only. Currently this returns false in all cases, as read-only address books are ignored by the API."
-        },
-        "name": {
-          "type": "string"
-        },
-        "contacts": {
-          "type": "array",
-          "items": {
-            "$ref": "contacts#/types/ContactNode"
-          },
-          "description": "A list of contacts held by this node's address book or mailing list."
-        },
-        "mailingLists": {
-          "type": "array",
-          "items": {
-            "$ref": "mailingLists#/types/MailingListNode"
-          },
-          "description": "A list of mailingLists in this node's address book."
-        }
-      },
-      "required": [
-        "id",
-        "type",
-        "name"
-      ]
     }
   }
 }

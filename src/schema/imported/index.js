@@ -21,12 +21,13 @@ import experiments from './experiments.json';
 import extension from './extension.json';
 import extension_protocol_handlers from './extension_protocol_handlers.json';
 import extensionTypes from './extension_types.json';
+import geckoProfiler from './geckoProfiler.json';
 import i18n from './i18n.json';
 import identity from './identity.json';
 import idle from './idle.json';
 import legacy from './legacy.json';
-import mailingLists from './mailingLists.json';
 import mailTabs from './mailTabs.json';
+import mailingLists from './mailingLists.json';
 import management from './management.json';
 import menus from './menus.json';
 import messages from './messages.json';
@@ -71,12 +72,13 @@ export default [
   extension,
   extension_protocol_handlers,
   extensionTypes,
+  geckoProfiler,
   i18n,
   identity,
   idle,
   legacy,
-  mailingLists,
   mailTabs,
+  mailingLists,
   management,
   menus,
   messages,

@@ -666,6 +666,9 @@
             "theme": {
               "$ref": "#/types/ThemeType"
             },
+            "dark_theme": {
+              "$ref": "#/types/ThemeType"
+            },
             "default_locale": {
               "type": "string"
             },

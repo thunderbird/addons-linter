@@ -445,10 +445,16 @@
           "$ref": "browserSettings#/definitions/OptionalPermission"
         },
         {
+          "$ref": "contacts#/definitions/OptionalPermission"
+        },
+        {
           "$ref": "cookies#/definitions/OptionalPermission"
         },
         {
           "$ref": "downloads#/definitions/OptionalPermission"
+        },
+        {
+          "$ref": "mailingLists#/definitions/OptionalPermission"
         },
         {
           "$ref": "menus#/definitions/OptionalPermission"
@@ -502,6 +508,9 @@
         },
         {
           "$ref": "experiments#/definitions/Permission"
+        },
+        {
+          "$ref": "geckoProfiler#/definitions/Permission"
         },
         {
           "$ref": "identity#/definitions/Permission"
