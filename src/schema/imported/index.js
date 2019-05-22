@@ -5,6 +5,8 @@ import addressBooks from './addressBook.json';
 import alarms from './alarms.json';
 import browserAction from './browserAction.json';
 import browserSettings from './browser_settings.json';
+import captivePortal from './captive_portal.json';
+import chrome_settings_overrides from './chrome_settings_overrides.json';
 import clipboard from './clipboard.json';
 import cloudFile from './cloudFile.json';
 import commands from './commands.json';
@@ -21,6 +23,7 @@ import experiments from './experiments.json';
 import extension from './extension.json';
 import extension_protocol_handlers from './extension_protocol_handlers.json';
 import extensionTypes from './extension_types.json';
+import folders from './folders.json';
 import geckoProfiler from './geckoProfiler.json';
 import i18n from './i18n.json';
 import identity from './identity.json';
@@ -56,6 +59,8 @@ export default [
   alarms,
   browserAction,
   browserSettings,
+  captivePortal,
+  chrome_settings_overrides,
   clipboard,
   cloudFile,
   commands,
@@ -72,6 +77,7 @@ export default [
   extension,
   extension_protocol_handlers,
   extensionTypes,
+  folders,
   geckoProfiler,
   i18n,
   identity,

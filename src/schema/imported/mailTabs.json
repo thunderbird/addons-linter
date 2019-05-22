@@ -52,7 +52,7 @@
             "displayedFolder": {
               "allOf": [
                 {
-                  "$ref": "accounts#/types/MailFolder"
+                  "$ref": "folders#/types/MailFolder"
                 },
                 {
                   "description": "Sets the folder displayed in the tab. The extension must have an accounts permission to do this."
@@ -157,7 +157,12 @@
             },
             "starred": {
               "type": "boolean",
-              "description": "Shows only starred messages."
+              "description": "Use <var>flagged</var> instead.",
+              "deprecated": true
+            },
+            "flagged": {
+              "type": "boolean",
+              "description": "Shows only flagged messages."
             },
             "contact": {
               "type": "boolean",
@@ -241,7 +246,7 @@
       "properties": {
         "text": {
           "type": "string",
-          "description": "String to match against the <var>recipients</var>, <var>sender</var>, <var>subject</var>, or <var>body</var>."
+          "description": "String to match against the <var>recipients</var>, <var>author</var>, <var>subject</var>, or <var>body</var>."
         },
         "recipients": {
           "type": "boolean",
@@ -249,7 +254,12 @@
         },
         "sender": {
           "type": "boolean",
-          "description": "Shows messages where <var>text</var> matches the sender."
+          "description": "Use <var>author</var> instead.",
+          "deprecated": true
+        },
+        "author": {
+          "type": "boolean",
+          "description": "Shows messages where <var>text</var> matches the author."
         },
         "subject": {
           "type": "boolean",

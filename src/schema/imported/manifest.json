@@ -244,6 +244,9 @@
           "$ref": "browserAction#/definitions/WebExtensionManifest"
         },
         {
+          "$ref": "chrome_settings_overrides#/definitions/WebExtensionManifest"
+        },
+        {
           "$ref": "cloudFile#/definitions/WebExtensionManifest"
         },
         {
@@ -454,6 +457,9 @@
           "$ref": "downloads#/definitions/OptionalPermission"
         },
         {
+          "$ref": "folders#/definitions/OptionalPermission"
+        },
+        {
           "$ref": "mailingLists#/definitions/OptionalPermission"
         },
         {
@@ -499,6 +505,9 @@
             "storage",
             "unlimitedStorage"
           ]
+        },
+        {
+          "$ref": "captivePortal#/definitions/Permission"
         },
         {
           "$ref": "contextualIdentities#/definitions/Permission"
@@ -563,7 +572,8 @@
     "ExtensionFileUrl": {
       "type": "string",
       "format": "strictRelativeUrl",
-      "pattern": "\\S"
+      "pattern": "\\S",
+      "preprocess": "localize"
     },
     "ImageDataOrExtensionURL": {
       "type": "string",

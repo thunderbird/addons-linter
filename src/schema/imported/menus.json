@@ -677,7 +677,7 @@
         "displayedFolder": {
           "allOf": [
             {
-              "$ref": "accounts#/types/MailFolder"
+              "$ref": "folders#/types/MailFolder"
             },
             {
               "description": "The displayed folder, if the context menu was opened in the message list."
@@ -687,7 +687,7 @@
         "selectedFolder": {
           "allOf": [
             {
-              "$ref": "accounts#/types/MailFolder"
+              "$ref": "folders#/types/MailFolder"
             },
             {
               "description": "The selected folder, if the context menu was opened in the folder pane."
