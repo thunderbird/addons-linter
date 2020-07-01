@@ -1,8 +1,8 @@
 {
-  "id": "composeAction",
-  "description": "Use toolbar actions to put icons in the message composition toolbars. In addition to its icon, a toolbar action can also have a tooltip, a badge, and a popup.",
+  "id": "messageDisplayAction",
+  "description": "Use toolbar actions to put icons in the message display toolbar. In addition to its icon, a toolbar action can also have a tooltip, a badge, and a popup.",
   "permissions": [
-    "manifest:compose_action"
+    "manifest:message_display_action"
   ],
   "functions": [
     {
@@ -14,7 +14,7 @@
         {
           "$merge": {
             "source": {
-              "$ref": "composeAction#/types/Details"
+              "$ref": "messageDisplayAction#/types/Details"
             },
             "with": {
               "name": "details",
@@ -83,7 +83,7 @@
         {
           "$merge": {
             "source": {
-              "$ref": "composeAction#/types/Details"
+              "$ref": "messageDisplayAction#/types/Details"
             },
             "with": {
               "name": "details",
@@ -142,7 +142,7 @@
         {
           "$merge": {
             "source": {
-              "$ref": "composeAction#/types/Details"
+              "$ref": "messageDisplayAction#/types/Details"
             },
             "with": {
               "name": "details",
@@ -211,7 +211,7 @@
         {
           "$merge": {
             "source": {
-              "$ref": "composeAction#/types/Details"
+              "$ref": "messageDisplayAction#/types/Details"
             },
             "with": {
               "name": "details",
@@ -280,7 +280,7 @@
         {
           "$merge": {
             "source": {
-              "$ref": "composeAction#/types/Details"
+              "$ref": "messageDisplayAction#/types/Details"
             },
             "with": {
               "name": "details",
@@ -451,7 +451,7 @@
   "definitions": {
     "WebExtensionManifest": {
       "properties": {
-        "compose_action": {
+        "message_display_action": {
           "type": "object",
           "properties": {
             "default_title": {
@@ -479,12 +479,8 @@
               "default": false
             },
             "default_area": {
-              "description": "Defines the location the composeAction will appear by default. The default location is maintoolbar.",
-              "type": "string",
-              "enum": [
-                "maintoolbar",
-                "formattoolbar"
-              ]
+              "description": "Currently unused.",
+              "type": "string"
             }
           }
         }
@@ -492,7 +488,7 @@
     }
   },
   "refs": {
-    "composeAction#/definitions/WebExtensionManifest": {
+    "messageDisplayAction#/definitions/WebExtensionManifest": {
       "namespace": "manifest",
       "type": "WebExtensionManifest"
     }
@@ -533,7 +529,7 @@
     },
     "OnClickData": {
       "type": "object",
-      "description": "Information sent when a compose action is clicked.",
+      "description": "Information sent when a message display action is clicked.",
       "properties": {
         "modifiers": {
           "type": "array",

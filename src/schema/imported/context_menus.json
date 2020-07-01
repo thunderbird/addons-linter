@@ -500,7 +500,7 @@
     }
   ],
   "definitions": {
-    "Permission": {
+    "PermissionNoPrompt": {
       "anyOf": [
         {
           "type": "string",
@@ -510,7 +510,7 @@
         }
       ]
     },
-    "OptionalPermission": {
+    "OptionalPermissionNoPrompt": {
       "anyOf": [
         {
           "type": "string",
@@ -522,13 +522,13 @@
     }
   },
   "refs": {
-    "menus#/definitions/Permission": {
+    "menus#/definitions/PermissionNoPrompt": {
       "namespace": "manifest",
-      "type": "Permission"
+      "type": "PermissionNoPrompt"
     },
-    "menus#/definitions/OptionalPermission": {
+    "menus#/definitions/OptionalPermissionNoPrompt": {
       "namespace": "manifest",
-      "type": "OptionalPermission"
+      "type": "OptionalPermissionNoPrompt"
     }
   },
   "types": {
@@ -671,7 +671,7 @@
               "$ref": "messages#/types/MessageList"
             },
             {
-              "description": "The selected messages, if the context menu was opened in the message list."
+              "description": "The selected messages, if the context menu was opened in the message list. The ``messagesRead`` permission is required."
             }
           ]
         },
@@ -681,7 +681,7 @@
               "$ref": "folders#/types/MailFolder"
             },
             {
-              "description": "The displayed folder, if the context menu was opened in the message list."
+              "description": "The displayed folder, if the context menu was opened in the message list. The ``accountsRead`` permission is required."
             }
           ]
         },
@@ -691,7 +691,7 @@
               "$ref": "folders#/types/MailFolder"
             },
             {
-              "description": "The selected folder, if the context menu was opened in the folder pane."
+              "description": "The selected folder, if the context menu was opened in the folder pane. The ``accountsRead`` permission is required."
             }
           ]
         }

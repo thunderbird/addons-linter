@@ -119,6 +119,9 @@
       "name": "getSelectedMessages",
       "type": "function",
       "description": "Lists the selected messages in the current folder. A messages permission is required to do this.",
+      "permissions": [
+        "messagesRead"
+      ],
       "async": true,
       "parameters": [
         {
@@ -155,11 +158,6 @@
               "type": "boolean",
               "description": "Shows only unread messages."
             },
-            "starred": {
-              "type": "boolean",
-              "description": "Use <var>flagged</var> instead.",
-              "deprecated": true
-            },
             "flagged": {
               "type": "boolean",
               "description": "Shows only flagged messages."
@@ -174,7 +172,7 @@
                   "type": "boolean"
                 },
                 {
-                  "$ref": "#/types/QuickFilterTagsDetail"
+                  "$ref": "messages#/types/TagsDetail"
                 }
               ],
               "description": "Shows only messages with tags on them."
@@ -203,44 +201,66 @@
       "name": "onDisplayedFolderChanged",
       "type": "function",
       "description": "Fired when the displayed folder changes in any mail tab.",
-      "parameters": []
+      "permissions": [
+        "accountsRead"
+      ],
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "tabs#/types/Tab"
+            },
+            {
+              "name": "tab"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "name": "displayedFolder"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "onSelectedMessagesChanged",
       "type": "function",
       "description": "Fired when the selected messages change in any mail tab.",
-      "parameters": []
+      "permissions": [
+        "messagesRead"
+      ],
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "tabs#/types/Tab"
+            },
+            {
+              "name": "tab"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "name": "selectedMessages"
+            }
+          ]
+        }
+      ]
     }
   ],
   "definitions": {},
   "refs": {},
   "types": {
-    "QuickFilterTagsDetail": {
-      "type": "object",
-      "properties": {
-        "tags": {
-          "type": "object",
-          "description": "Object keys are tags to filter on, values are <code>true</code> if the message must have the tag, or <code>false</code> if it must not have the tag. For a list of available tags, call the :ref:`messages.listTags` method.",
-          "patternProperties": {
-            ".*": {
-              "type": "boolean"
-            }
-          }
-        },
-        "mode": {
-          "type": "string",
-          "description": "Whether all of the tag filters must apply, or any of them.",
-          "enum": [
-            "all",
-            "any"
-          ]
-        }
-      },
-      "required": [
-        "tags",
-        "mode"
-      ]
-    },
     "QuickFilterTextDetail": {
       "type": "object",
       "properties": {
@@ -251,11 +271,6 @@
         "recipients": {
           "type": "boolean",
           "description": "Shows messages where <var>text</var> matches the recipients."
-        },
-        "sender": {
-          "type": "boolean",
-          "description": "Use <var>author</var> instead.",
-          "deprecated": true
         },
         "author": {
           "type": "boolean",

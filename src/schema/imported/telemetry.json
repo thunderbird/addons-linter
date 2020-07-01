@@ -2,8 +2,7 @@
   "id": "telemetry",
   "description": "Use the <code>browser.telemetry</code> API to send telemetry data to the Mozilla Telemetry service. Restricted to Mozilla privileged webextensions.",
   "permissions": [
-    "telemetry",
-    "mozillaAddons"
+    "telemetry"
   ],
   "functions": [
     {
@@ -53,6 +52,39 @@
           }
         }
       ]
+    },
+    {
+      "name": "submitEncryptedPing",
+      "type": "function",
+      "description": "Submits a custom ping to the Telemetry back-end, with an encrypted payload. Requires a telemetry entry in the manifest to be used.",
+      "parameters": [
+        {
+          "name": "message",
+          "type": "object",
+          "additionalProperties": {},
+          "description": "The data payload for the ping, which will be encrypted."
+        },
+        {
+          "description": "Options object.",
+          "name": "options",
+          "type": "object",
+          "properties": {
+            "schemaName": {
+              "type": "string",
+              "description": "Schema name used for payload."
+            },
+            "schemaVersion": {
+              "type": "integer",
+              "description": "Schema version used for payload."
+            }
+          },
+          "required": [
+            "schemaName",
+            "schemaVersion"
+          ]
+        }
+      ],
+      "async": true
     },
     {
       "name": "canUpload",
@@ -122,6 +154,91 @@
           "name": "name",
           "type": "string",
           "description": "The scalar name."
+        },
+        {
+          "name": "value",
+          "type": "integer",
+          "minimum": 0,
+          "description": "The numeric value to set the scalar to. Only unsigned integers supported."
+        }
+      ]
+    },
+    {
+      "name": "keyedScalarAdd",
+      "type": "function",
+      "description": "Adds the value to the given keyed scalar.",
+      "async": true,
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The scalar name"
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "description": "The key name"
+        },
+        {
+          "name": "value",
+          "type": "integer",
+          "minimum": 1,
+          "description": "The numeric value to add to the scalar. Only unsigned integers supported."
+        }
+      ]
+    },
+    {
+      "name": "keyedScalarSet",
+      "type": "function",
+      "description": "Sets the keyed scalar to the given value. Throws if the value type doesn't match the scalar type.",
+      "async": true,
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The scalar name."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "description": "The key name."
+        },
+        {
+          "name": "value",
+          "description": "The value to set the scalar to.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "object",
+              "additionalProperties": {}
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "keyedScalarSetMaximum",
+      "type": "function",
+      "description": "Sets the keyed scalar to the maximum of the current and the passed value",
+      "async": true,
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string",
+          "description": "The scalar name."
+        },
+        {
+          "name": "key",
+          "type": "string",
+          "description": "The key name."
         },
         {
           "name": "value",
@@ -231,7 +348,63 @@
     }
   ],
   "definitions": {
-    "Permission": {
+    "WebExtensionManifest": {
+      "properties": {
+        "telemetry": {
+          "type": "object",
+          "properties": {
+            "ping_type": {
+              "type": "string"
+            },
+            "schemaNamespace": {
+              "type": "string"
+            },
+            "public_key": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "key": {
+                  "type": "object",
+                  "properties": {
+                    "crv": {
+                      "type": "string"
+                    },
+                    "kty": {
+                      "type": "string"
+                    },
+                    "x": {
+                      "type": "string"
+                    },
+                    "y": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "key"
+              ]
+            },
+            "study_name": {
+              "type": "string"
+            },
+            "pioneer_id": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "required": [
+            "ping_type",
+            "schemaNamespace",
+            "public_key"
+          ]
+        }
+      }
+    },
+    "PermissionNoPrompt": {
       "anyOf": [
         {
           "type": "string",
@@ -243,9 +416,13 @@
     }
   },
   "refs": {
-    "telemetry#/definitions/Permission": {
+    "telemetry#/definitions/WebExtensionManifest": {
       "namespace": "manifest",
-      "type": "Permission"
+      "type": "WebExtensionManifest"
+    },
+    "telemetry#/definitions/PermissionNoPrompt": {
+      "namespace": "manifest",
+      "type": "PermissionNoPrompt"
     }
   },
   "types": {

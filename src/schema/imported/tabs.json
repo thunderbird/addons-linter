@@ -762,12 +762,21 @@
     }
   ],
   "definitions": {
+    "OptionalPermissionNoPrompt": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "activeTab"
+          ]
+        }
+      ]
+    },
     "OptionalPermission": {
       "anyOf": [
         {
           "type": "string",
           "enum": [
-            "activeTab",
             "tabs",
             "tabHide"
           ]
@@ -776,6 +785,10 @@
     }
   },
   "refs": {
+    "tabs#/definitions/OptionalPermissionNoPrompt": {
+      "namespace": "manifest",
+      "type": "OptionalPermissionNoPrompt"
+    },
     "tabs#/definitions/OptionalPermission": {
       "namespace": "manifest",
       "type": "OptionalPermission"

@@ -59,8 +59,20 @@
       ]
     }
   ],
+  "properties": {
+    "autoload": {
+      "allOf": [
+        {
+          "$ref": "types#/types/Setting"
+        },
+        {
+          "description": "Controls whether or not the built-in PKCS#11 module (osclientcerts) is loaded."
+        }
+      ]
+    }
+  },
   "definitions": {
-    "Permission": {
+    "OptionalPermission": {
       "anyOf": [
         {
           "type": "string",
@@ -72,9 +84,9 @@
     }
   },
   "refs": {
-    "pkcs11#/definitions/Permission": {
+    "pkcs11#/definitions/OptionalPermission": {
       "namespace": "manifest",
-      "type": "Permission"
+      "type": "OptionalPermission"
     }
   },
   "types": {}
