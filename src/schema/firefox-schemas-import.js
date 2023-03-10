@@ -35,9 +35,11 @@ const SKIP_SCHEMAS = ['native_host_manifest.json'];
 
 const schemaRegexes = [
   // eslint-disable-next-line prefer-regex-literals
-  new RegExp('browser/components/extensions/schemas/.*\\.json'),
+  //new RegExp('browser/components/extensions/schemas/.*\\.json'),
   // eslint-disable-next-line prefer-regex-literals
   new RegExp('toolkit/components/extensions/schemas/.*\\.json'),
+  // eslint-disable-next-line prefer-regex-literals
+  new RegExp('comm/mail/components/extensions/schemas/.*\\.json'),
 ];
 
 export const refMap = {
@@ -253,6 +255,7 @@ inner.updateWithAddonsLinterData = (firefoxSchemas, ourSchemas) => {
   Object.keys(ourSchemas).forEach((namespace) => {
     const firefoxSchema = firefoxSchemas[namespace];
     const { file, ...ourSchema } = ourSchemas[namespace];
+
     // Allow overriding the namespace if `file` is set, this supports "$import".
     if (file) {
       schemas[ourSchema.id || namespace] = {
