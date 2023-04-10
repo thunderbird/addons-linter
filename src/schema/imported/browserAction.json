@@ -1,19 +1,77 @@
 {
   "$id": "browserAction",
-  "description": "Use browser actions to put icons in the main browser toolbar, to the right of the address bar. In addition to its icon, a browser action can also have a tooltip, a badge, and a popup.",
   "permissions": [
     "manifest:action",
     "manifest:browser_action"
   ],
+  "max_manifest_version": 2,
+  "definitions": {
+    "WebExtensionManifest": {
+      "properties": {
+        "action": {
+          "allOf": [
+            {
+              "$ref": "#/types/ActionManifest"
+            },
+            {
+              "min_manifest_version": 3
+            },
+            {
+              "$ref": "#/types/ActionManifest"
+            },
+            {
+              "min_manifest_version": 3
+            }
+          ]
+        },
+        "browser_action": {
+          "allOf": [
+            {
+              "$ref": "#/types/ActionManifest"
+            },
+            {
+              "max_manifest_version": 2
+            },
+            {
+              "$ref": "#/types/ActionManifest"
+            },
+            {
+              "max_manifest_version": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "refs": {
+    "browserAction#/definitions/WebExtensionManifest": {
+      "namespace": "manifest",
+      "type": "WebExtensionManifest"
+    }
+  },
   "types": {
     "ActionManifest": {
       "type": "object",
       "properties": {
+        "default_label": {
+          "type": "string",
+          "description": "The label of the action button, defaults to its title. Can be set to an empty string to not display any label. If the containing toolbar is configured to display text only, the title will be used as fallback.",
+          "preprocess": "localize"
+        },
         "default_title": {
           "type": "string",
+          "description": "The title of the action button. This shows up in the tooltip and the label. Defaults to the add-on name.",
           "preprocess": "localize"
         },
         "default_icon": {
+          "allOf": [
+            {
+              "$ref": "manifest#/types/IconPath"
+            },
+            {
+              "description": "The paths to one or more icons for the action button."
+            }
+          ],
           "$ref": "manifest#/types/IconPath"
         },
         "theme_icons": {
@@ -27,25 +85,63 @@
         "default_popup": {
           "type": "string",
           "format": "relativeUrl",
+          "description": "The html document to be opened as a popup when the user clicks on the action button.",
           "preprocess": "localize"
         },
         "browser_style": {
           "type": "boolean",
+          "description": "Enable browser styles. See the `MDN documentation on browser styles <|link-mdn-browser-styles|>`__ for more information.",
           "default": false
         },
         "default_area": {
           "description": "Defines the location the browserAction will appear by default.  The default location is navbar.",
           "type": "string",
           "enum": [
+            "maintoolbar",
+            "tabstoolbar",
             "navbar",
             "menupanel",
             "tabstrip",
             "personaltoolbar"
           ]
+        },
+        "default_windows": {
+          "description": "Defines the windows, the action button should appear in. Defaults to showing it only in the <value>normal</value> Thunderbird window, but can also be shown in the <value>messageDisplay</value> window.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "normal",
+              "messageDisplay"
+            ]
+          },
+          "default": [
+            "normal"
+          ]
+        },
+        "allowed_spaces": {
+          "description": "Defines the spaces, in which the action button can appear in the toolbar of the normal Thunderbird window. Defaults to only allowing the action in the <value>mail</value> space. The <value>default</value> space is for tabs that don't belong to any space. If this is an empty array, the action button is shown in all spaces.",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "mail",
+              "addressbook",
+              "calendar",
+              "tasks",
+              "chat",
+              "settings",
+              "default"
+            ]
+          },
+          "default": [
+            "mail"
+          ]
         }
       }
     }
   },
+  "description": "Use browser actions to put icons in the main browser toolbar, to the right of the address bar. In addition to its icon, a browser action can also have a tooltip, a badge, and a popup.",
   "functions": [
     {
       "name": "setTitle",
@@ -536,38 +632,5 @@
         }
       ]
     }
-  ],
-  "max_manifest_version": 2,
-  "definitions": {
-    "WebExtensionManifest": {
-      "properties": {
-        "action": {
-          "allOf": [
-            {
-              "$ref": "#/types/ActionManifest"
-            },
-            {
-              "min_manifest_version": 3
-            }
-          ]
-        },
-        "browser_action": {
-          "allOf": [
-            {
-              "$ref": "#/types/ActionManifest"
-            },
-            {
-              "max_manifest_version": 2
-            }
-          ]
-        }
-      }
-    }
-  },
-  "refs": {
-    "browserAction#/definitions/WebExtensionManifest": {
-      "namespace": "manifest",
-      "type": "WebExtensionManifest"
-    }
-  }
+  ]
 }

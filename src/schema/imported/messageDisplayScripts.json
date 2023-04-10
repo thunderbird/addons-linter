@@ -1,0 +1,79 @@
+{
+  "$id": "messageDisplayScripts",
+  "permissions": [
+    "messagesModify"
+  ],
+  "functions": [
+    {
+      "name": "register",
+      "type": "function",
+      "description": "Register a message display script programmatically",
+      "async": true,
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/RegisteredMessageDisplayScriptOptions"
+            },
+            {
+              "name": "messageDisplayScriptOptions"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "messagesModify"
+          ]
+        }
+      ]
+    }
+  },
+  "refs": {
+    "messageDisplayScripts#/definitions/OptionalPermission": {
+      "namespace": "manifest",
+      "type": "OptionalPermission"
+    }
+  },
+  "types": {
+    "RegisteredMessageDisplayScriptOptions": {
+      "type": "object",
+      "description": "Details of a message display script registered programmatically",
+      "properties": {
+        "css": {
+          "type": "array",
+          "description": "The list of CSS files to inject",
+          "items": {
+            "$ref": "extensionTypes#/types/ExtensionFileOrCode"
+          }
+        },
+        "js": {
+          "type": "array",
+          "description": "The list of JavaScript files to inject",
+          "items": {
+            "$ref": "extensionTypes#/types/ExtensionFileOrCode"
+          }
+        }
+      }
+    },
+    "RegisteredMessageDisplayScript": {
+      "type": "object",
+      "description": "An object that represents a message display script registered programmatically",
+      "functions": [
+        {
+          "name": "unregister",
+          "type": "function",
+          "description": "Unregister a message display script registered programmatically",
+          "async": true,
+          "parameters": []
+        }
+      ]
+    }
+  }
+}
