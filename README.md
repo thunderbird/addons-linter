@@ -8,6 +8,31 @@ It can also be used as a standalone binary and library.
 
 You can find more information about the linter and it's implemented rules in our [documentation](https://mozilla.github.io/addons-linter/).
 
+## Thunderbird Usage
+
+This repo has some minor changes applied to fix namespace/id conflicts with Firefox.
+
+### Updating API
+Run the download api script:
+
+```shell
+python ./tb-scripts/download_apis.py
+```
+
+Once that is done, call the importer script:
+
+```shell
+./scripts/firefox-schema-import ./tmp/thunderbird_api.zip
+```
+
+And then finally build: (Make sure to follow the install directions first!)
+
+```shell
+npm run build
+```
+
+
+
 ## Usage
 
 ### Command Line
