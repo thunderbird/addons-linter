@@ -386,6 +386,17 @@
         }
       ]
     },
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "declarativeNetRequestFeedback"
+          ],
+          "min_manifest_version": 3
+        }
+      ]
+    },
     "PermissionNoPrompt": {
       "anyOf": [
         {

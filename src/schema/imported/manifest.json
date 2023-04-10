@@ -11,13 +11,13 @@
         "manifest_version": {
           "type": "integer",
           "minimum": 2,
-          "maximum": 2,
+          "maximum": 3,
           "postprocess": "manifestVersionCheck"
         },
         "applications": {
           "allOf": [
             {
-              "$ref": "#/types/DeprecatedApplications"
+              "$ref": "#/types/BrowserSpecificSettings"
             },
             {
               "description": "The applications property is deprecated, please use 'browser_specific_settings'",
@@ -412,16 +412,13 @@
           "$ref": "chrome_settings_overrides#/definitions/WebExtensionManifest"
         },
         {
-          "$ref": "cloudFile#/definitions/WebExtensionManifest"
-        },
-        {
           "$ref": "commands#/definitions/WebExtensionManifest"
         },
         {
-          "$ref": "composeAction#/definitions/WebExtensionManifest"
+          "$ref": "declarativeNetRequest#/definitions/WebExtensionManifest"
         },
         {
-          "$ref": "declarativeNetRequest#/definitions/WebExtensionManifest"
+          "$ref": "devtools#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "experiments#/definitions/WebExtensionManifest"
@@ -433,16 +430,22 @@
           "$ref": "i18n#/definitions/WebExtensionManifest"
         },
         {
-          "$ref": "messageDisplayAction#/definitions/WebExtensionManifest"
+          "$ref": "omnibox#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "pageAction#/definitions/WebExtensionManifest"
+        },
+        {
+          "$ref": "sidebarAction#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "telemetry#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "theme#/definitions/WebExtensionManifest"
+        },
+        {
+          "$ref": "url_overrides#/definitions/WebExtensionManifest"
         },
         {
           "$ref": "userScripts#/definitions/WebExtensionManifest"
@@ -635,10 +638,16 @@
           "$ref": "cookies#/definitions/OptionalPermissionNoPrompt"
         },
         {
+          "$ref": "contextMenus#/definitions/OptionalPermissionNoPrompt"
+        },
+        {
           "$ref": "menus#/definitions/OptionalPermissionNoPrompt"
         },
         {
           "$ref": "scripting#/definitions/OptionalPermissionNoPrompt"
+        },
+        {
+          "$ref": "search#/definitions/OptionalPermissionNoPrompt"
         },
         {
           "$ref": "tabs#/definitions/OptionalPermissionNoPrompt"
@@ -663,10 +672,7 @@
           ]
         },
         {
-          "$ref": "accounts#/definitions/OptionalPermission"
-        },
-        {
-          "$ref": "addressBooks#/definitions/OptionalPermission"
+          "$ref": "bookmarks#/definitions/OptionalPermission"
         },
         {
           "$ref": "browserSettings#/definitions/OptionalPermission"
@@ -675,37 +681,25 @@
           "$ref": "browsingData#/definitions/OptionalPermission"
         },
         {
-          "$ref": "compose#/definitions/OptionalPermission"
-        },
-        {
-          "$ref": "composeScripts#/definitions/OptionalPermission"
-        },
-        {
-          "$ref": "contacts#/definitions/OptionalPermission"
-        },
-        {
           "$ref": "declarativeNetRequest#/definitions/OptionalPermission"
+        },
+        {
+          "$ref": "devtools#/definitions/OptionalPermission"
         },
         {
           "$ref": "downloads#/definitions/OptionalPermission"
         },
         {
-          "$ref": "folders#/definitions/OptionalPermission"
+          "$ref": "find#/definitions/OptionalPermission"
         },
         {
-          "$ref": "identities#/definitions/OptionalPermission"
-        },
-        {
-          "$ref": "mailingLists#/definitions/OptionalPermission"
+          "$ref": "history#/definitions/OptionalPermission"
         },
         {
           "$ref": "management#/definitions/OptionalPermission"
         },
         {
-          "$ref": "messageDisplayScripts#/definitions/OptionalPermission"
-        },
-        {
-          "$ref": "messages#/definitions/OptionalPermission"
+          "$ref": "pkcs11#/definitions/OptionalPermission"
         },
         {
           "$ref": "privacy#/definitions/OptionalPermission"
@@ -717,7 +711,13 @@
           "$ref": "runtime#/definitions/OptionalPermission"
         },
         {
+          "$ref": "sessions#/definitions/OptionalPermission"
+        },
+        {
           "$ref": "tabs#/definitions/OptionalPermission"
+        },
+        {
+          "$ref": "topSites#/definitions/OptionalPermission"
         },
         {
           "$ref": "webNavigation#/definitions/OptionalPermission"
@@ -749,7 +749,13 @@
           "$ref": "networkStatus#/definitions/PermissionPrivileged"
         },
         {
+          "$ref": "normandyAddonStudy#/definitions/PermissionPrivileged"
+        },
+        {
           "$ref": "telemetry#/definitions/PermissionPrivileged"
+        },
+        {
+          "$ref": "urlbar#/definitions/PermissionPrivileged"
         }
       ]
     },
@@ -786,6 +792,9 @@
         },
         {
           "$ref": "identity#/definitions/PermissionNoPrompt"
+        },
+        {
+          "$ref": "contextMenus#/definitions/PermissionNoPrompt"
         },
         {
           "$ref": "menus#/definitions/PermissionNoPrompt"
@@ -888,45 +897,11 @@
         }
       }
     },
-    "GeckoAndroidSpecificProperties": {
-      "type": "object",
-      "properties": {
-        "strict_min_version": {
-          "type": "string"
-        },
-        "strict_max_version": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": {}
-    },
-    "DeprecatedApplications": {
-      "type": "object",
-      "properties": {
-        "gecko": {
-          "$ref": "#/types/FirefoxSpecificProperties"
-        },
-        "gecko_android": {
-          "allOf": [
-            {
-              "$ref": "#/types/GeckoAndroidSpecificProperties"
-            },
-            {
-              "unsupported": true
-            }
-          ]
-        }
-      },
-      "additionalProperties": {}
-    },
     "BrowserSpecificSettings": {
       "type": "object",
       "properties": {
         "gecko": {
           "$ref": "#/types/FirefoxSpecificProperties"
-        },
-        "gecko_android": {
-          "$ref": "#/types/GeckoAndroidSpecificProperties"
         }
       },
       "additionalProperties": {}
