@@ -265,3 +265,6 @@ export const SCHEMA_KEYWORDS = {
   // Non-standard JSONSchema keywords (defined and used by the Firefox and/or addons-linter).
   ...SCHEMA_KEYWORDS_CUSTOM,
 };
+
+// Ignores 'MANIFEST_FIELD_PRIVILEGED' on platforms that don't use it
+export const IGNORE_PRIVILEGED_ERRORS = true;
