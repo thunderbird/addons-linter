@@ -378,9 +378,10 @@ export class SchemaValidator {
 
   get validateLocale() {
     if (!this._localeValidator) {
+      // This conflicts with Thunderbird's message API, so it's now _messages
       this._localeValidator = this._validator.compile({
         ...this.messagesSchemaObject,
-        $id: 'messages',
+        $id: '_messages',
         $ref: '#/types/WebExtensionMessages',
       });
     }
