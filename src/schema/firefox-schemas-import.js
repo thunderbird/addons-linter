@@ -35,7 +35,7 @@ const SKIP_SCHEMAS = ['native_host_manifest.json'];
 
 const schemaRegexes = [
   // eslint-disable-next-line prefer-regex-literals
-  //new RegExp('browser/components/extensions/schemas/.*\\.json'),
+  new RegExp('browser/components/extensions/schemas/.*\\.json'),
   // eslint-disable-next-line prefer-regex-literals
   new RegExp('toolkit/components/extensions/schemas/.*\\.json'),
   // eslint-disable-next-line prefer-regex-literals
@@ -562,12 +562,6 @@ inner.normalizeSchema = (schemas, file) => {
       // we want to expand those definitions otherwise they will be converted into
       // a $merge form, which is only used in the manifest validation and so the
       // eslint rules that look for the API method definitions will not work as expected.
-      const obj = apiNamespaceSchemas.find((schema) => schema.namespace === $import);
-
-      if (obj === undefined) {
-        return {};
-      }
-
       const {
         // We don't want to import into the target schema the `namespace` name and
         // the manifest versioning fields (e.g. "browserAction" has max_manifest_version 2
@@ -577,7 +571,7 @@ inner.normalizeSchema = (schemas, file) => {
         min_manifest_version,
         max_manifest_version,
         ...importedRest
-      } = obj;
+      } = apiNamespaceSchemas.find((schema) => schema.namespace === $import);
       if (importedRest.$import) {
         throw new Error(oneLine`Unsupported schema format:
           "${namespace}" is importing "${importedNamespace}"

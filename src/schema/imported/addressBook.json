@@ -190,15 +190,68 @@
       ]
     }
   ],
+  "properties": {
+    "provider": {
+      "permissions": [
+        "addressBooks"
+      ],
+      "events": [
+        {
+          "name": "onSearchRequest",
+          "type": "function",
+          "description": "Registering this listener will create and list a read-only address book in Thunderbird's address book window, similar to LDAP address books. When selecting this address book, users will first see no contacts, but they can search for them, which will fire this event. Contacts returned by the listener callback will be displayed as contact cards in the address book. Several listeners can be registered, to create multiple address books.\n\nThe event also fires for each registered listener (for each created read-only address book), when users type something into the mail composer's <em>To:</em> field, or into similar fields like the calendar meeting attendees field. Contacts returned by the listener callback will be added to the autocomplete results in the dropdown of that field.\n\nExample: <literalinclude>includes/addressBooks/onSearchRequest.js<lang>JavaScript</lang></literalinclude>",
+          "parameters": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/types/AddressBookNode"
+                },
+                {
+                  "name": "node"
+                }
+              ]
+            },
+            {
+              "name": "searchString",
+              "description": "The search text that the user entered. Not available when invoked from the advanced address book search dialog.",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "query",
+              "type": "string",
+              "description": "The boolean query expression corresponding to the search. **Note:** This parameter may change in future releases of Thunderbird.",
+              "optional": true
+            }
+          ],
+          "extraParameters": [
+            {
+              "name": "parameters",
+              "description": "Descriptions for the address book created by registering this listener.",
+              "type": "object",
+              "properties": {
+                "addressBookName": {
+                  "type": "string",
+                  "description": "The name of the created address book."
+                },
+                "isSecure": {
+                  "type": "boolean",
+                  "description": "Whether the address book search queries are using encrypted protocols like HTTPS."
+                },
+                "id": {
+                  "type": "string",
+                  "description": "The unique ID of the created address book. If several listeners have been added, the ``id`` allows to identify which address book initiated the search request. If not provided, a unique ID will be generated for you."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
   "definitions": {
     "OptionalPermission": {
       "anyOf": [
-        {
-          "type": "string",
-          "enum": [
-            "addressBooks"
-          ]
-        },
         {
           "type": "string",
           "enum": [
@@ -276,65 +329,6 @@
         "id",
         "type",
         "name"
-      ]
-    }
-  },
-  "properties": {
-    "provider": {
-      "permissions": [
-        "addressBooks"
-      ],
-      "events": [
-        {
-          "name": "onSearchRequest",
-          "type": "function",
-          "description": "Registering this listener will create and list a read-only address book in Thunderbird's address book window, similar to LDAP address books. When selecting this address book, users will first see no contacts, but they can search for them, which will fire this event. Contacts returned by the listener callback will be displayed as contact cards in the address book. Several listeners can be registered, to create multiple address books.\n\nThe event also fires for each registered listener (for each created read-only address book), when users type something into the mail composer's <em>To:</em> field, or into similar fields like the calendar meeting attendees field. Contacts returned by the listener callback will be added to the autocomplete results in the dropdown of that field.\n\nExample: <literalinclude>includes/addressBooks/onSearchRequest.js<lang>JavaScript</lang></literalinclude>",
-          "parameters": [
-            {
-              "allOf": [
-                {
-                  "$ref": "#/types/AddressBookNode"
-                },
-                {
-                  "name": "node"
-                }
-              ]
-            },
-            {
-              "name": "searchString",
-              "description": "The search text that the user entered. Not available when invoked from the advanced address book search dialog.",
-              "type": "string",
-              "optional": true
-            },
-            {
-              "name": "query",
-              "type": "string",
-              "description": "The boolean query expression corresponding to the search. **Note:** This parameter may change in future releases of Thunderbird.",
-              "optional": true
-            }
-          ],
-          "extraParameters": [
-            {
-              "name": "parameters",
-              "description": "Descriptions for the address book created by registering this listener.",
-              "type": "object",
-              "properties": {
-                "addressBookName": {
-                  "type": "string",
-                  "description": "The name of the created address book."
-                },
-                "isSecure": {
-                  "type": "boolean",
-                  "description": "Whether the address book search queries are using encrypted protocols like HTTPS."
-                },
-                "id": {
-                  "type": "string",
-                  "description": "The unique ID of the created address book. If several listeners have been added, the ``id`` allows to identify which address book initiated the search request. If not provided, a unique ID will be generated for you."
-                }
-              }
-            }
-          ]
-        }
       ]
     }
   }

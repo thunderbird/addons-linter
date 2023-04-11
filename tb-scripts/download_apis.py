@@ -1,57 +1,8 @@
 import argparse
-import json
 import os
 import shutil
-from json import JSONDecodeError
 from zipfile import ZipFile
-
-import json5
 import requests
-
-
-def get_schemas(directory, out_directory):
-    files = os.listdir(directory)
-    for file in files:
-        if ".json" not in file:
-            continue
-
-        print(f"Checking {file}")
-
-        with open(f"{directory}/{file}", 'r') as fh:
-            data = fh.read()
-            try:
-                # Some schemas have comments...we need to use another library to read these
-                data = json5.loads(data)
-            except JSONDecodeError as ex:
-                print(f"Error reading {file}: {ex.msg}")
-                continue
-
-            schema_files = []
-
-            # Grab a copy of the manifest if avail
-            # If there's more than one non-manifest namespace, make copy dict of manifest + that one
-            if len(data) > 1:
-                manifest = {}
-                for (index, schema) in enumerate(data):
-                    if schema['namespace'] == 'manifest':
-                        manifest = schema
-                        continue
-
-                    schema_files.append([
-                        manifest,
-                        schema
-                    ])
-
-            # If we have more than one schema, write it out as a new file
-            if len(schema_files) > 1:
-                for schemas in schema_files:
-                    schema = schemas[1]
-                    with open(f"{out_directory}/{schema['namespace']}.json", 'w+') as fw:
-                        fw.write(json.dumps(schemas))
-            else:
-                # Otherwise copy the file over!
-                with open(f"{out_directory}/{file}", 'w+') as fw:
-                    fw.write(json.dumps(data))
 
 
 def download_tip(url, filename):
@@ -143,16 +94,9 @@ def main(working_dir, existing_source_dir, mozilla_central_zip, comm_central_zip
             if os.path.isdir(original_path):
                 shutil.copytree(original_path, copy_path, dirs_exist_ok=True)
             else:
-                os.makedirs(copy_path, exist_ok=True)
+                os.makedirs(os.path.dirname(copy_path), exist_ok=True)
                 shutil.copy(original_path, copy_path)
 
-    # Remove the schemas folder, as we need to reprocess it
-    schema_folder = os.path.join(base_dir, merged_folder, "comm/mail/components/extensions/schemas")
-    shutil.rmtree(schema_folder)
-    os.makedirs(schema_folder, exist_ok=True)
-
-    print("Splitting comm-central namespaces")
-    get_schemas(os.path.join(base_dir, comm_central_folder, "mail/components/extensions/schemas"), os.path.join(base_dir, merged_folder, "comm/mail/components/extensions/schemas"))
 
     print("Zipping up")
     # File path (without zip), archive format, folder to zip up

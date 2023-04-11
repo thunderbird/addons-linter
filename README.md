@@ -31,7 +31,15 @@ And then finally build: (Make sure to follow the install directions first!)
 npm run build
 ```
 
+### Common Errors
 
+During an API schema update you may encounter the following error:
+
+ `schema with key or id "<a problematic schema id goes here>" already exists` 
+ 
+This is caused by having multiple namespaces in one schema file. To fix this you'll need to create an `update` schema file in `src/schema/updates`.
+
+This is a small json file that will let `firefox-schemas-import` know which namespaces to split off into their own json file. A good example to base off of is `action.json`, this splits off the MV3 action namespace from browser_action.json
 
 ## Usage
 
