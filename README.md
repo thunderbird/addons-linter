@@ -16,7 +16,7 @@ This repo has some minor changes applied to fix namespace/id conflicts with Fire
 Run the download api script:
 
 ```shell
-python ./tb-scripts/download_apis.py
+python ./tb-scripts/download_apis.py --com-central-zip="<url to current beta release>" --mozilla-central-zip="<url to matching comm-central beta release>"
 ```
 
 Once that is done, call the importer script:
