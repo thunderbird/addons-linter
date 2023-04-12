@@ -1,0 +1,335 @@
+{
+  "$id": "addressBooks",
+  "permissions": [
+    "addressBooks"
+  ],
+  "functions": [
+    {
+      "name": "openUI",
+      "type": "function",
+      "async": true,
+      "description": "Opens the address book user interface.",
+      "parameters": []
+    },
+    {
+      "name": "closeUI",
+      "type": "function",
+      "async": true,
+      "description": "Closes the address book user interface.",
+      "parameters": []
+    },
+    {
+      "name": "list",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "complete",
+          "type": "boolean",
+          "optional": true,
+          "default": false,
+          "description": "If set to true, results will include contacts and mailing lists for each address book."
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/types/AddressBookNode"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Gets a list of the user's address books, optionally including all contacts and mailing lists."
+    },
+    {
+      "name": "get",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "complete",
+          "type": "boolean",
+          "optional": true,
+          "default": false,
+          "description": "If set to true, results will include contacts and mailing lists for this address book."
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/AddressBookNode"
+            }
+          ]
+        }
+      ],
+      "description": "Gets a single address book, optionally including all contacts and mailing lists."
+    },
+    {
+      "name": "create",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "properties",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "string",
+              "description": "The id of the new address book."
+            }
+          ]
+        }
+      ],
+      "description": "Creates a new, empty address book."
+    },
+    {
+      "name": "update",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "properties",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      ],
+      "description": "Renames an address book."
+    },
+    {
+      "name": "delete",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "description": "Removes an address book, and all associated contacts and mailing lists."
+    }
+  ],
+  "events": [
+    {
+      "name": "onCreated",
+      "type": "function",
+      "description": "Fired when an address book is created.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/AddressBookNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onUpdated",
+      "type": "function",
+      "description": "Fired when an address book is renamed.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/AddressBookNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onDeleted",
+      "type": "function",
+      "description": "Fired when an addressBook is deleted.",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "properties": {
+    "provider": {
+      "permissions": [
+        "addressBooks"
+      ],
+      "events": [
+        {
+          "name": "onSearchRequest",
+          "type": "function",
+          "description": "Registering this listener will create and list a read-only address book in Thunderbird's address book window, similar to LDAP address books. When selecting this address book, users will first see no contacts, but they can search for them, which will fire this event. Contacts returned by the listener callback will be displayed as contact cards in the address book. Several listeners can be registered, to create multiple address books.\n\nThe event also fires for each registered listener (for each created read-only address book), when users type something into the mail composer's <em>To:</em> field, or into similar fields like the calendar meeting attendees field. Contacts returned by the listener callback will be added to the autocomplete results in the dropdown of that field.\n\nExample: <literalinclude>includes/addressBooks/onSearchRequest.js<lang>JavaScript</lang></literalinclude>",
+          "parameters": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/types/AddressBookNode"
+                },
+                {
+                  "name": "node"
+                }
+              ]
+            },
+            {
+              "name": "searchString",
+              "description": "The search text that the user entered. Not available when invoked from the advanced address book search dialog.",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "query",
+              "type": "string",
+              "description": "The boolean query expression corresponding to the search. **Note:** This parameter may change in future releases of Thunderbird.",
+              "optional": true
+            }
+          ],
+          "extraParameters": [
+            {
+              "name": "parameters",
+              "description": "Descriptions for the address book created by registering this listener.",
+              "type": "object",
+              "properties": {
+                "addressBookName": {
+                  "type": "string",
+                  "description": "The name of the created address book."
+                },
+                "isSecure": {
+                  "type": "boolean",
+                  "description": "Whether the address book search queries are using encrypted protocols like HTTPS."
+                },
+                "id": {
+                  "type": "string",
+                  "description": "The unique ID of the created address book. If several listeners have been added, the ``id`` allows to identify which address book initiated the search request. If not provided, a unique ID will be generated for you."
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "addressBooks"
+          ]
+        }
+      ]
+    }
+  },
+  "refs": {
+    "addressBooks#/definitions/OptionalPermission": {
+      "namespace": "manifest",
+      "type": "OptionalPermission"
+    }
+  },
+  "types": {
+    "NodeType": {
+      "type": "string",
+      "enum": [
+        "addressBook",
+        "contact",
+        "mailingList"
+      ],
+      "description": "Indicates the type of a Node."
+    },
+    "AddressBookNode": {
+      "type": "object",
+      "description": "A node representing an address book.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the program is restarted."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "The ``id`` of the parent object."
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/types/NodeType"
+            },
+            {
+              "description": "Always set to <value>addressBook</value>."
+            }
+          ]
+        },
+        "readOnly": {
+          "type": "boolean",
+          "description": "Indicates if the object is read-only."
+        },
+        "remote": {
+          "type": "boolean",
+          "description": "Indicates if the address book is accessed via remote look-up."
+        },
+        "name": {
+          "type": "string"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "contacts#/types/ContactNode"
+          },
+          "description": "A list of contacts held by this node's address book or mailing list."
+        },
+        "mailingLists": {
+          "type": "array",
+          "items": {
+            "$ref": "mailingLists#/types/MailingListNode"
+          },
+          "description": "A list of mailingLists in this node's address book."
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name"
+      ]
+    }
+  }
+}

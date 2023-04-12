@@ -8,6 +8,39 @@ It can also be used as a standalone binary and library.
 
 You can find more information about the linter and it's implemented rules in our [documentation](https://mozilla.github.io/addons-linter/).
 
+## Thunderbird Usage
+
+This repo has some minor changes applied to fix namespace/id conflicts with Firefox.
+
+### Updating API
+Run the download api script:
+
+```shell
+python ./tb-scripts/download_apis.py --com-central-zip="<url to current beta release>" --mozilla-central-zip="<url to matching comm-central beta release>"
+```
+
+Once that is done, call the importer script:
+
+```shell
+./scripts/firefox-schema-import ./tmp/thunderbird_api.zip
+```
+
+And then finally build: (Make sure to follow the install directions first!)
+
+```shell
+npm run build
+```
+
+### Common Errors
+
+During an API schema update you may encounter the following error:
+
+ `schema with key or id "<a problematic schema id goes here>" already exists` 
+ 
+This is caused by having multiple namespaces in one schema file. To fix this you'll need to create an `update` schema file in `src/schema/updates`.
+
+This is a small json file that will let `firefox-schemas-import` know which namespaces to split off into their own json file. A good example to base off of is `action.json`, this splits off the MV3 action namespace from browser_action.json
+
 ## Usage
 
 ### Command Line

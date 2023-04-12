@@ -14,7 +14,7 @@
     {
       "name": "create",
       "type": "function",
-      "description": "Creates a new context menu item. Note that if an error occurs during creation, you may not find out until the creation callback fires (the details will be in $(ref:runtime.lastError)).",
+      "description": "Creates a new context menu item. Note that if an error occurs during creation, you may not find out until the creation callback fires (the details will be in `runtime.lastError <|link-runtime-last-error|>`__).",
       "returns": {
         "anyOf": [
           {
@@ -37,7 +37,7 @@
                   "$ref": "#/types/ItemType"
                 },
                 {
-                  "description": "The type of menu item. Defaults to 'normal' if not specified."
+                  "description": "The type of menu item. Defaults to <value>normal</value> if not specified."
                 }
               ]
             },
@@ -46,20 +46,22 @@
               "description": "The unique ID to assign to this item. Mandatory for event pages. Cannot be the same as another ID for this extension."
             },
             "icons": {
-              "type": "object",
-              "patternProperties": {
-                "^[1-9]\\d*$": {
-                  "type": "string"
+              "allOf": [
+                {
+                  "$ref": "manifest#/types/IconPath"
+                },
+                {
+                  "description": "Custom icons to display next to the menu item. Custom icons can only be set for items appearing in submenus."
                 }
-              }
+              ]
             },
             "title": {
               "type": "string",
-              "description": "The text to be displayed in the item; this is <em>required</em> unless <code>type</code> is 'separator'. When the context is 'selection', you can use <code>%s</code> within the string to show the selected text. For example, if this parameter's value is \"Translate '%s' to Pig Latin\" and the user selects the word \"cool\", the context menu item for the selection is \"Translate 'cool' to Pig Latin\"."
+              "description": "The text to be displayed in the item; this is <em>required</em> unless ``type`` is <value>separator</value>. When the context is <value>selection</value>, you can use <value>%s</value> within the string to show the selected text. For example, if this parameter's value is <value>Translate '%s' to Latin</value> and the user selects the word <value>cool</value>, the context menu item for the selection is <value>Translate 'cool' to Latin</value>. To specify an access key for the new menu entry, include a <value>&</value> before the desired letter in the title. For example <value>&Help</value>."
             },
             "checked": {
               "type": "boolean",
-              "description": "The initial state of a checkbox or radio item: true for selected and false for unselected. Only one radio item can be selected at a time in a given group of radio items."
+              "description": "The initial state of a checkbox or radio item: <value>true</value> for selected and <value>false</value> for unselected. Only one radio item can be selected at a time in a given group of radio items."
             },
             "contexts": {
               "type": "array",
@@ -67,7 +69,7 @@
                 "$ref": "#/types/ContextType"
               },
               "minItems": 1,
-              "description": "List of contexts this menu item will appear in. Defaults to ['page'] if not specified."
+              "description": "List of contexts this menu item will appear in. Defaults to <value>['page']</value> if not specified."
             },
             "viewTypes": {
               "type": "array",
@@ -83,8 +85,7 @@
             },
             "onclick": {
               "type": "function",
-              "max_manifest_version": 2,
-              "description": "A function that will be called back when the menu item is clicked. Event pages cannot use this; instead, they should register a listener for $(ref:contextMenus.onClicked).",
+              "description": "A function that will be called back when the menu item is clicked. Event pages cannot use this.",
               "parameters": [
                 {
                   "allOf": [
@@ -104,7 +105,7 @@
                     },
                     {
                       "name": "tab",
-                      "description": "The details of the tab where the click took place. Note: this parameter only present for extensions."
+                      "description": "The details of the tab where the click took place."
                     }
                   ]
                 }
@@ -126,7 +127,7 @@
               "items": {
                 "type": "string"
               },
-              "description": "Lets you restrict the item to apply only to documents whose URL matches one of the given patterns. (This applies to frames as well.) For details on the format of a pattern, see $(topic:match_patterns)[Match Patterns]."
+              "description": "Lets you restrict the item to apply only to documents whose URL matches one of the given patterns. (This applies to frames as well.) For details on the format of a pattern, see `Match Patterns <|link-match-patterns|>`__."
             },
             "targetUrlPatterns": {
               "type": "array",
@@ -140,32 +141,8 @@
               "description": "Whether this context menu item is enabled or disabled. Defaults to true."
             },
             "command": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "string",
-                  "enum": [
-                    "_execute_browser_action",
-                    "_execute_page_action",
-                    "_execute_sidebar_action"
-                  ],
-                  "max_manifest_version": 2,
-                  "description": "Manifest V2 supports internal commands _execute_page_action, _execute_browser_action and _execute_sidebar_action."
-                },
-                {
-                  "type": "string",
-                  "enum": [
-                    "_execute_action",
-                    "_execute_page_action",
-                    "_execute_sidebar_action"
-                  ],
-                  "min_manifest_version": 3,
-                  "description": "Manifest V3 supports internal commands _execute_page_action, _execute_action and _execute_sidebar_action."
-                }
-              ],
-              "description": "Specifies a command to issue for the context click."
+              "type": "string",
+              "description": "Specifies a command to issue for the context click. Currently supports internal commands <value>_execute_action</value>, <value>_execute_compose_action</value> and <value>_execute_message_display_action</value>."
             }
           }
         },
@@ -173,7 +150,7 @@
           "type": "function",
           "name": "callback",
           "optional": true,
-          "description": "Called when the item has been created in the browser. If there were any problems creating the item, details will be available in $(ref:runtime.lastError).",
+          "description": "Called when the item has been created in the browser. If there were any problems creating the item, details will be available in `runtime.lastError <|link-runtime-last-error|>`__.",
           "parameters": []
         }
       ]
@@ -205,12 +182,7 @@
               "$ref": "#/types/ItemType"
             },
             "icons": {
-              "type": "object",
-              "patternProperties": {
-                "^[1-9]\\d*$": {
-                  "type": "string"
-                }
-              }
+              "$ref": "manifest#/types/IconPath"
             },
             "title": {
               "type": "string"
@@ -238,7 +210,6 @@
             },
             "onclick": {
               "type": "function",
-              "max_manifest_version": 2,
               "parameters": [
                 {
                   "allOf": [
@@ -257,7 +228,7 @@
                     },
                     {
                       "name": "tab",
-                      "description": "The details of the tab where the click took place. Note: this parameter only present for extensions."
+                      "description": "The details of the tab where the click took place. **Note:** this parameter only present for extensions."
                     }
                   ]
                 }
@@ -272,7 +243,7 @@
                   "type": "string"
                 }
               ],
-              "description": "Note: You cannot change an item to be a child of one of its own descendants."
+              "description": "**Note:** You cannot change an item to be a child of one of its own descendants."
             },
             "documentUrlPatterns": {
               "type": "array",
@@ -348,7 +319,7 @@
         "menus.overrideContext"
       ],
       "type": "function",
-      "description": "Show the matching menu items from this extension instead of the default menu. This should be called during a 'contextmenu' DOM event handler, and only applies to the menu that opens after this event.",
+      "description": "Show the matching menu items from this extension instead of the default menu. This should be called during a `contextmenu <|link-contextmenu-event|>`__ event handler, and only applies to the menu that opens after this event.",
       "parameters": [
         {
           "name": "contextOptions",
@@ -362,20 +333,14 @@
             "context": {
               "type": "string",
               "enum": [
-                "bookmark",
                 "tab"
               ],
-              "description": "ContextType to override, to allow menu items from other extensions in the menu. Currently only 'bookmark' and 'tab' are supported. showDefaults cannot be used with this option."
-            },
-            "bookmarkId": {
-              "type": "string",
-              "minLength": 1,
-              "description": "Required when context is 'bookmark'. Requires 'bookmark' permission."
+              "description": "ContextType to override, to allow menu items from other extensions in the menu. Currently only <value>tab</value> is supported. ``contextOptions.showDefaults`` cannot be used with this option."
             },
             "tabId": {
               "type": "integer",
               "minimum": 0,
-              "description": "Required when context is 'tab'. Requires 'tabs' permission."
+              "description": "Required when context is <value>tab</value>. Requires the <permission>tabs</permission> permission."
             }
           }
         }
@@ -395,11 +360,11 @@
         "content",
         "devtools"
       ],
-      "description": "Retrieve the element that was associated with a recent contextmenu event.",
+      "description": "Retrieve the element that was associated with a recent `contextmenu <|link-contextmenu-event|>`__ event.",
       "parameters": [
         {
           "type": "integer",
-          "description": "The identifier of the clicked element, available as info.targetElementId in the menus.onShown, onClicked or onclick event.",
+          "description": "The identifier of the clicked element, available as ``info.targetElementId`` in the :ref:`menus.onShown` and :ref:`menus.onClicked` events.",
           "name": "targetElementId"
         }
       ],
@@ -415,7 +380,7 @@
     {
       "name": "onClicked",
       "type": "function",
-      "description": "Fired when a context menu item is clicked.",
+      "description": "Fired when a context menu item is clicked. This is a user input event handler. For asynchronous listeners some `restrictions <|link-user-input-restrictions|>`__ apply.",
       "parameters": [
         {
           "allOf": [
@@ -445,69 +410,17 @@
     {
       "name": "onShown",
       "type": "function",
-      "description": "Fired when a menu is shown. The extension can add, modify or remove menu items and call menus.refresh() to update the menu.",
+      "description": "Fired when a menu is shown. The extension can add, modify or remove menu items and call :ref:`menus.refresh` to update the menu.",
       "parameters": [
         {
-          "name": "info",
-          "type": "object",
-          "description": "Information about the context of the menu action and the created menu items. For more information about each property, see OnClickData. The following properties are only set if the extension has host permissions for the given context: linkUrl, linkText, srcUrl, pageUrl, frameUrl, selectionText.",
-          "properties": {
-            "menuIds": {
-              "description": "A list of IDs of the menu items that were shown.",
-              "type": "array",
-              "items": {
-                "anyOf": [
-                  {
-                    "type": "integer"
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              }
+          "allOf": [
+            {
+              "$ref": "#/types/OnShowData"
             },
-            "contexts": {
-              "description": "A list of all contexts that apply to the menu.",
-              "type": "array",
-              "items": {
-                "$ref": "#/types/ContextType"
-              }
-            },
-            "viewType": {
-              "$ref": "extension#/types/ViewType"
-            },
-            "editable": {
-              "type": "boolean"
-            },
-            "mediaType": {
-              "type": "string"
-            },
-            "linkUrl": {
-              "type": "string"
-            },
-            "linkText": {
-              "type": "string"
-            },
-            "srcUrl": {
-              "type": "string"
-            },
-            "pageUrl": {
-              "type": "string"
-            },
-            "frameUrl": {
-              "type": "string"
-            },
-            "selectionText": {
-              "type": "string"
-            },
-            "targetElementId": {
-              "type": "integer"
+            {
+              "name": "info",
+              "description": "Information about the context of the menu action and the created menu items."
             }
-          },
-          "required": [
-            "menuIds",
-            "contexts",
-            "editable"
           ]
         },
         {
@@ -536,8 +449,7 @@
         {
           "type": "string",
           "enum": [
-            "menus",
-            "contextMenus"
+            "menus"
           ]
         }
       ]
@@ -565,43 +477,48 @@
   },
   "types": {
     "ContextType": {
-      "description": "The different contexts a menu can appear in. Specifying 'all' is equivalent to the combination of all other contexts except for 'tab' and 'tools_menu'.",
       "anyOf": [
         {
           "type": "string",
           "enum": [
             "all",
-            "page",
-            "frame",
-            "selection",
-            "link",
-            "editable",
-            "password",
-            "image",
-            "video",
+            "all_message_attachments",
             "audio",
-            "launcher",
-            "bookmark",
+            "compose_action",
+            "compose_attachments",
+            "compose_body",
+            "editable",
+            "folder_pane",
+            "frame",
+            "image",
+            "link",
+            "message_attachments",
+            "message_display_action",
+            "message_list",
+            "page",
+            "password",
+            "selection",
             "tab",
-            "tools_menu"
+            "tools_menu",
+            "video"
           ]
         },
         {
           "type": "string",
+          "max_manifest_version": 2,
           "enum": [
-            "browser_action",
-            "page_action"
-          ],
-          "max_manifest_version": 2
+            "browser_action"
+          ]
         },
         {
           "type": "string",
+          "min_manifest_version": 3,
           "enum": [
             "action"
-          ],
-          "min_manifest_version": 3
+          ]
         }
-      ]
+      ],
+      "description": "The different contexts a menu can appear in. Specifying <value>all</value> is equivalent to the combination of all other contexts excluding <value>tab</value> and <value>tools_menu</value>. More information about each context can be found in the `Supported UI Elements <|link-ui-elements|>`__ article on developer.thunderbird.net."
     },
     "ItemType": {
       "type": "string",
@@ -612,6 +529,150 @@
         "separator"
       ],
       "description": "The type of menu item."
+    },
+    "OnShowData": {
+      "type": "object",
+      "description": "Information sent when a context menu is being shown. Some properties are only included if the extension has host permission for the given context, for example :permission:`activeTab` for content tabs, :permission:`compose` for compose tabs and :permission:`messagesRead` for message display tabs.",
+      "properties": {
+        "menuIds": {
+          "description": "A list of IDs of the menu items that were shown.",
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        },
+        "contexts": {
+          "description": "A list of all contexts that apply to the menu.",
+          "type": "array",
+          "items": {
+            "$ref": "#/types/ContextType"
+          }
+        },
+        "editable": {
+          "type": "boolean",
+          "description": "A flag indicating whether the element is editable (text input, textarea, etc.)."
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "One of <value>image</value>, <value>video</value>, or <value>audio</value> if the context menu was activated on one of these types of elements."
+        },
+        "viewType": {
+          "allOf": [
+            {
+              "$ref": "extension#/types/ViewType"
+            },
+            {
+              "description": "The type of view where the menu is shown. May be unset if the menu is not associated with a view."
+            }
+          ]
+        },
+        "linkText": {
+          "type": "string",
+          "description": "If the element is a link, the text of that link. **Note:** Host permission is required."
+        },
+        "linkUrl": {
+          "type": "string",
+          "description": "If the element is a link, the URL it points to. **Note:** Host permission is required."
+        },
+        "srcUrl": {
+          "type": "string",
+          "description": "Will be present for elements with a <em>src</em> URL. **Note:** Host permission is required."
+        },
+        "pageUrl": {
+          "type": "string",
+          "description": "The URL of the page where the menu item was clicked. This property is not set if the click occurred in a context where there is no current page, such as in a launcher context menu. **Note:** Host permission is required."
+        },
+        "frameUrl": {
+          "type": "string",
+          "description": "The URL of the frame of the element where the context menu was clicked, if it was in a frame. **Note:** Host permission is required."
+        },
+        "selectionText": {
+          "type": "string",
+          "description": "The text for the context selection, if any. **Note:** Host permission is required."
+        },
+        "targetElementId": {
+          "type": "integer",
+          "description": "An identifier of the clicked content element, if any. Use :ref:`menus.getTargetElement` in the page to find the corresponding element."
+        },
+        "fieldId": {
+          "type": "string",
+          "description": "An identifier of the clicked Thunderbird UI element, if any.",
+          "enum": [
+            "composeSubject",
+            "composeTo",
+            "composeCc",
+            "composeBcc",
+            "composeReplyTo",
+            "composeNewsgroupTo"
+          ]
+        },
+        "selectedMessages": {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "description": "The selected messages, if the context menu was opened in the message list. The <permission>messagesRead</permission> permission is required."
+            }
+          ]
+        },
+        "displayedFolder": {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "description": "The displayed folder, if the context menu was opened in the message list. The <permission>accountsRead</permission> permission is required."
+            }
+          ]
+        },
+        "selectedFolder": {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "description": "The selected folder, if the context menu was opened in the folder pane. The <permission>accountsRead</permission> permission is required."
+            }
+          ]
+        },
+        "selectedAccount": {
+          "allOf": [
+            {
+              "$ref": "accounts#/types/MailAccount"
+            },
+            {
+              "description": "The selected account, if the context menu was opened on an account entry in the folder pane. The <permission>accountsRead</permission> permission is required."
+            }
+          ]
+        },
+        "attachments": {
+          "type": "array",
+          "description": "The selected attachments. The <permission>compose</permission> permission is required to return attachments of a message being composed. The <permission>messagesRead</permission> permission is required to return attachments of displayed messages.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "compose#/types/ComposeAttachment"
+              },
+              {
+                "$ref": "messages#/types/MessageAttachment"
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "menuIds",
+        "contexts",
+        "editable"
+      ]
     },
     "OnClickData": {
       "type": "object",
@@ -639,6 +700,14 @@
           ],
           "description": "The parent ID, if any, for the item clicked."
         },
+        "editable": {
+          "type": "boolean",
+          "description": "A flag indicating whether the element is editable (text input, textarea, etc.)."
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "One of <value>image</value>, <value>video</value>, or <value>audio</value> if the context menu was activated on one of these types of elements."
+        },
         "viewType": {
           "allOf": [
             {
@@ -648,10 +717,6 @@
               "description": "The type of view where the menu is clicked. May be unset if the menu is not associated with a view."
             }
           ]
-        },
-        "mediaType": {
-          "type": "string",
-          "description": "One of 'image', 'video', or 'audio' if the context menu was activated on one of these types of elements."
         },
         "linkText": {
           "type": "string",
@@ -663,11 +728,11 @@
         },
         "srcUrl": {
           "type": "string",
-          "description": "Will be present for elements with a 'src' URL."
+          "description": "Will be present for elements with a <em>src</em> URL."
         },
         "pageUrl": {
           "type": "string",
-          "description": "The URL of the page where the menu item was clicked. This property is not set if the click occured in a context where there is no current page, such as in a launcher context menu."
+          "description": "The URL of the page where the menu item was clicked. This property is not set if the click occurred in a context where there is no current page, such as in a launcher context menu."
         },
         "frameId": {
           "type": "integer",
@@ -676,15 +741,11 @@
         },
         "frameUrl": {
           "type": "string",
-          "description": " The URL of the frame of the element where the context menu was clicked, if it was in a frame."
+          "description": "The URL of the frame of the element where the context menu was clicked, if it was in a frame."
         },
         "selectionText": {
           "type": "string",
           "description": "The text for the context selection, if any."
-        },
-        "editable": {
-          "type": "boolean",
-          "description": "A flag indicating whether the element is editable (text input, textarea, etc.)."
         },
         "wasChecked": {
           "type": "boolean",
@@ -693,10 +754,6 @@
         "checked": {
           "type": "boolean",
           "description": "A flag indicating the state of a checkbox or radio item after it is clicked."
-        },
-        "bookmarkId": {
-          "type": "string",
-          "description": "The id of the bookmark where the context menu was clicked, if it was on a bookmark."
         },
         "modifiers": {
           "type": "array",
@@ -718,7 +775,73 @@
         },
         "targetElementId": {
           "type": "integer",
-          "description": "An identifier of the clicked element, if any. Use menus.getTargetElement in the page to find the corresponding element."
+          "description": "An identifier of the clicked content element, if any. Use :ref:`menus.getTargetElement` in the page to find the corresponding element."
+        },
+        "fieldId": {
+          "type": "string",
+          "description": "An identifier of the clicked Thunderbird UI element, if any.",
+          "enum": [
+            "composeSubject",
+            "composeTo",
+            "composeCc",
+            "composeBcc",
+            "composeReplyTo",
+            "composeNewsgroupTo"
+          ]
+        },
+        "selectedMessages": {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "description": "The selected messages, if the context menu was opened in the message list. The <permission>messagesRead</permission> permission is required."
+            }
+          ]
+        },
+        "displayedFolder": {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "description": "The displayed folder, if the context menu was opened in the message list. The <permission>accountsRead</permission> permission is required."
+            }
+          ]
+        },
+        "selectedFolder": {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "description": "The selected folder, if the context menu was opened in the folder pane. The <permission>accountsRead</permission> permission is required."
+            }
+          ]
+        },
+        "selectedAccount": {
+          "allOf": [
+            {
+              "$ref": "accounts#/types/MailAccount"
+            },
+            {
+              "description": "The selected account, if the context menu was opened on an account entry in the folder pane. The <permission>accountsRead</permission> permission is required."
+            }
+          ]
+        },
+        "attachments": {
+          "type": "array",
+          "description": "The selected attachments. The <permission>compose</permission> permission is required to return attachments of a message being composed. The <permission>messagesRead</permission> permission is required to return attachments of displayed messages.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "compose#/types/ComposeAttachment"
+              },
+              {
+                "$ref": "messages#/types/MessageAttachment"
+              }
+            ]
+          }
         }
       },
       "required": [

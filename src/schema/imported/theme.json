@@ -1,6 +1,6 @@
 {
   "$id": "theme",
-  "description": "The theme API allows customizing of visual elements of the browser.",
+  "description": "The theme API allows for customization of Thunderbird's visual elements.",
   "events": [
     {
       "name": "onUpdated",
@@ -25,7 +25,7 @@
     {
       "name": "getCurrent",
       "type": "function",
-      "async": true,
+      "async": "callback",
       "description": "Returns the current theme for the specified window or the last focused window.",
       "parameters": [
         {
@@ -33,6 +33,16 @@
           "name": "windowId",
           "optional": true,
           "description": "The window for which we want the theme."
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/ThemeType"
+            }
+          ]
         }
       ]
     },
@@ -96,7 +106,14 @@
     "WebExtensionManifest": {
       "properties": {
         "theme_experiment": {
-          "$ref": "#/types/ThemeExperiment"
+          "allOf": [
+            {
+              "$ref": "#/types/ThemeExperiment"
+            },
+            {
+              "description": "A theme experiment allows modifying the user interface of Thunderbird beyond what is currently possible using the built-in color, image and property keys of :ref:`theme.ThemeType`. These experiments are a precursor to proposing new theme features for inclusion in Thunderbird. Experimentation is done by mapping internal CSS color, image and property variables to new theme keys and using them in :ref:`theme.ThemeType` and by loading additional style sheets to add new CSS variables, extending the theme-able areas of Thunderbird. Can be used in static and dynamic themes."
+            }
+          ]
         }
       }
     }
@@ -117,8 +134,14 @@
       "description": "Info provided in the onUpdated listener.",
       "properties": {
         "theme": {
-          "type": "object",
-          "description": "The new theme after update"
+          "allOf": [
+            {
+              "$ref": "#/types/ThemeType"
+            },
+            {
+              "description": "The new theme after update"
+            }
+          ]
         },
         "windowId": {
           "type": "integer",
@@ -130,12 +153,15 @@
       ]
     },
     "ThemeColor": {
+      "description": "Defines a color value.",
       "anyOf": [
         {
-          "type": "string"
+          "type": "string",
+          "description": "A string containing a valid `CSS color string <|link-css-color-string|>`__, including hexadecimal or functional representations. For example the color *crimson* can be specified as: <li><value>crimson</value> <li><value>#dc143c</value> <li><value>rgb(220, 20, 60)</value> (or <value>rgba(220, 20, 60, 0.5)</value> to set 50% opacity) <li><value>hsl(348, 83%, 47%)</value> (or <value>hsla(348, 83%, 47%, 0.5)</value> to set 50% opacity)"
         },
         {
           "type": "array",
+          "description": "An RGB array of 3 integers. For example <value>[220, 20, 60]</value> for the color *crimson*.",
           "minItems": 3,
           "maxItems": 3,
           "items": {
@@ -146,6 +172,7 @@
         },
         {
           "type": "array",
+          "description": "An RGBA array of 3 integers and a fractional (a float between 0 and 1). For example <value>[220, 20, 60, 0.5]<value> for the color *crimson* with 50% opacity.",
           "minItems": 4,
           "maxItems": 4,
           "items": {
@@ -155,25 +182,36 @@
       ]
     },
     "ThemeExperiment": {
+      "description": "Defines additional color, image and property keys to be used in :ref:`theme.ThemeType`, extending the theme-able areas of Thunderbird.",
       "type": "object",
       "properties": {
         "stylesheet": {
-          "$ref": "manifest#/types/ExtensionURL"
+          "allOf": [
+            {
+              "$ref": "manifest#/types/ExtensionURL"
+            },
+            {
+              "description": "URL to a stylesheet introducing additional CSS variables, extending the theme-able areas of Thunderbird. The `theme_experiment add-on in our example repository <https://github.com/thundernest/sample-extensions/tree/master/theme_experiment>`__ is using the stylesheet shown below, to add the <value>--chat-button-color</value> CSS color variable: <literalinclude>includes/theme/theme_experiment_style.css<lang>CSS</lang></literalinclude>The following <em>manifest.json</em> file maps the </value>--chat-button-color</value> CSS color variable to the theme color key <value>exp_chat_button</value> and uses it to set a color for the chat button: <literalinclude>includes/theme/theme_experiment_manifest.json<lang>JSON</lang></literalinclude>"
+            }
+          ]
         },
         "images": {
           "type": "object",
+          "description": "A <em>dictionary object</em> with one or more <em>key-value</em> pairs to map new theme image keys to internal Thunderbird CSS image variables. The new image key is usable as an image reference in :ref:`theme.ThemeType`. Example: <literalinclude>includes/theme/theme_experiment_image.json<lang>JSON</lang></literalinclude>",
           "additionalProperties": {
             "type": "string"
           }
         },
         "colors": {
           "type": "object",
+          "description": "A <em>dictionary object</em> with one or more <em>key-value</em> pairs to map new theme color keys to internal Thunderbird CSS color variables. The example shown below maps the theme color key <value>popup_affordance</value> to the CSS color variable </value>--arrowpanel-dimmed</value>. The new color key is usable as a color reference in :ref:`theme.ThemeType`. <literalinclude>includes/theme/theme_experiment_color.json<lang>JSON</lang></literalinclude>",
           "additionalProperties": {
             "type": "string"
           }
         },
         "properties": {
           "type": "object",
+          "description": "A <em>dictionary object</em> with one or more <em>key-value</em> pairs to map new theme property keys to internal Thunderbird CSS property variables. The new property key is usable as a property reference in :ref:`theme.ThemeType`. Example: <literalinclude>includes/theme/theme_experiment_property.json<lang>JSON</lang></literalinclude>",
           "additionalProperties": {
             "type": "string"
           }
@@ -181,9 +219,11 @@
       }
     },
     "ThemeType": {
+      "description": "Contains the color, image and property settings of a theme.",
       "type": "object",
       "properties": {
         "images": {
+          "description": "A <em>dictionary object</em> with one or more <em>key-value</em> pairs to map images to theme image keys. The following built-in theme image keys are supported:",
           "type": "object",
           "properties": {
             "additional_backgrounds": {
@@ -191,7 +231,8 @@
               "items": {
                 "$ref": "manifest#/types/ImageDataOrExtensionURL"
               },
-              "maxItems": 15
+              "maxItems": 15,
+              "description": "Additional images added to the header area and displayed behind the ``theme_frame`` image."
             },
             "headerURL": {
               "allOf": [
@@ -199,12 +240,19 @@
                   "$ref": "manifest#/types/ImageDataOrExtensionURL"
                 },
                 {
-                  "deprecated": "Unsupported images property, use 'theme.images.theme_frame', this alias is ignored in Firefox >= 70."
+                  "deprecated": "Unsupported images property, use ``theme.images.theme_frame``, this alias is ignored in Thunderbird >= 70."
                 }
               ]
             },
             "theme_frame": {
-              "$ref": "manifest#/types/ImageDataOrExtensionURL"
+              "allOf": [
+                {
+                  "$ref": "manifest#/types/ImageDataOrExtensionURL"
+                },
+                {
+                  "description": "Foreground image on the header area."
+                }
+              ]
             }
           },
           "additionalProperties": {
@@ -212,10 +260,18 @@
           }
         },
         "colors": {
+          "description": "A <em>dictionary object</em> with one or more <em>key-value</em> pairs to map color values to theme color keys. The following built-in theme color keys are supported:",
           "type": "object",
           "properties": {
             "tab_selected": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "Background color of the selected tab. Defaults to the color specified by ``toolbar``."
+                }
+              ]
             },
             "accentcolor": {
               "allOf": [
@@ -223,15 +279,29 @@
                   "$ref": "#/types/ThemeColor"
                 },
                 {
-                  "deprecated": "Unsupported colors property, use 'theme.colors.frame', this alias is ignored in Firefox >= 70."
+                  "deprecated": "Unsupported colors property, use ``theme.colors.frame``, this alias is ignored in Thunderbird >= 70."
                 }
               ]
             },
             "frame": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color of the header area."
+                }
+              ]
             },
             "frame_inactive": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color of the header area when the window is inactive."
+                }
+              ]
             },
             "textcolor": {
               "allOf": [
@@ -239,27 +309,69 @@
                   "$ref": "#/types/ThemeColor"
                 },
                 {
-                  "deprecated": "Unsupported color property, use 'theme.colors.tab_background_text', this alias is ignored in Firefox >= 70."
+                  "deprecated": "Unsupported color property, use ``theme.colors.tab_background_text``, this alias is ignored in Thunderbird >= 70."
                 }
               ]
             },
             "tab_background_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color of the unselected tabs."
+                }
+              ]
             },
             "tab_background_separator": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the vertical separator of the background tabs."
+                }
+              ]
             },
             "tab_loading": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the tab loading indicator."
+                }
+              ]
             },
             "tab_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color for the selected tab. Defaults to the color specified by ``toolbar_text``."
+                }
+              ]
             },
             "tab_line": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the selected tab line."
+                }
+              ]
             },
             "toolbar": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color of the toolbars. Also used as default value for ``tab_selected``."
+                }
+              ]
             },
             "toolbar_text": {
               "allOf": [
@@ -267,21 +379,49 @@
                   "$ref": "#/types/ThemeColor"
                 },
                 {
-                  "description": "This color property is an alias of 'bookmark_text'."
+                  "description": "The text color in the main Thunderbird toolbar. Also used as default value for ``icons`` and ``tab_text``."
                 }
               ]
             },
             "bookmark_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "Not used in Thunderbird."
+                }
+              ]
             },
             "toolbar_field": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color for fields in the toolbar, such as the search field."
+                }
+              ]
             },
             "toolbar_field_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color for fields in the toolbar."
+                }
+              ]
             },
             "toolbar_field_border": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The border color for fields in the toolbar."
+                }
+              ]
             },
             "toolbar_field_separator": {
               "allOf": [
@@ -289,84 +429,260 @@
                   "$ref": "#/types/ThemeColor"
                 },
                 {
-                  "deprecated": "This color property is ignored in Firefox >= 89."
+                  "description": "Not used in Thunderbird.",
+                  "deprecated": "This color property is ignored in >= 89."
                 }
               ]
             },
             "toolbar_top_separator": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the line separating the top of the toolbar from the region above."
+                }
+              ]
             },
             "toolbar_bottom_separator": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the line separating the bottom of the toolbar from the region below."
+                }
+              ]
             },
             "toolbar_vertical_separator": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the vertical separators on the toolbars."
+                }
+              ]
             },
             "icons": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the toolbar icons. Defaults to the color specified by ``toolbar_text``."
+                }
+              ]
             },
             "icons_attention": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the toolbar icons in attention state such as the chat icon with new messages."
+                }
+              ]
             },
             "button_background_hover": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the background of the toolbar buttons on hover."
+                }
+              ]
             },
             "button_background_active": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color of the background of the pressed toolbar buttons."
+                }
+              ]
             },
             "popup": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color of popups such as the AppMenu."
+                }
+              ]
             },
             "popup_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color of popups."
+                }
+              ]
             },
             "popup_border": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The border color of popups."
+                }
+              ]
             },
             "toolbar_field_focus": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The focused background color for fields in the toolbar."
+                }
+              ]
             },
             "toolbar_field_text_focus": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color in the focused fields in the toolbar."
+                }
+              ]
             },
             "toolbar_field_border_focus": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The focused border color for fields in the toolbar."
+                }
+              ]
             },
             "popup_highlight": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color of items highlighted using the keyboard inside popups."
+                }
+              ]
             },
             "popup_highlight_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color of items highlighted using the keyboard inside popups."
+                }
+              ]
             },
             "ntp_background": {
-              "$ref": "#/types/ThemeColor"
-            },
-            "ntp_card_background": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "Not used in Thunderbird."
+                }
+              ]
             },
             "ntp_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "Not used in Thunderbird."
+                }
+              ]
             },
             "sidebar": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color of the trees."
+                }
+              ]
             },
             "sidebar_border": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The border color of the trees."
+                }
+              ]
             },
             "sidebar_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color of the trees. Needed to enable the tree theming."
+                }
+              ]
             },
             "sidebar_highlight": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color of highlighted rows in trees."
+                }
+              ]
             },
             "sidebar_highlight_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The text color of highlighted rows in trees."
+                }
+              ]
+            },
+            "sidebar_highlight_border": {
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The border color of highlighted rows in trees."
+                }
+              ]
             },
             "toolbar_field_highlight": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The background color used to indicate the current selection of text in the search field."
+                }
+              ]
             },
             "toolbar_field_highlight_text": {
-              "$ref": "#/types/ThemeColor"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeColor"
+                },
+                {
+                  "description": "The color used to draw text that's currently selected in the search field."
+                }
+              ]
             }
           },
           "additionalProperties": {
@@ -374,6 +690,7 @@
           }
         },
         "properties": {
+          "description": "A <em>dictionary object</em> with one or more <em>key-value</em> pairs to map property values to theme property keys. The following built-in theme property keys are supported:",
           "type": "object",
           "properties": {
             "additional_backgrounds_alignment": {
@@ -413,21 +730,21 @@
               "maxItems": 15
             },
             "color_scheme": {
+              "description": "If set, overrides the general theme (context menus, toolbars, content area).",
               "type": "string",
               "enum": [
-                "auto",
                 "light",
                 "dark",
-                "system"
+                "auto"
               ]
             },
             "content_color_scheme": {
+              "description": "If set, overrides the color scheme for the content area.",
               "type": "string",
               "enum": [
-                "auto",
                 "light",
                 "dark",
-                "system"
+                "auto"
               ]
             }
           },
@@ -450,13 +767,27 @@
               "$ref": "#/types/ThemeType"
             },
             "dark_theme": {
-              "$ref": "#/types/ThemeType"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeType"
+                },
+                {
+                  "description": "Fallback properties for the dark system theme."
+                }
+              ]
             },
             "default_locale": {
               "type": "string"
             },
             "theme_experiment": {
-              "$ref": "#/types/ThemeExperiment"
+              "allOf": [
+                {
+                  "$ref": "#/types/ThemeExperiment"
+                },
+                {
+                  "description": "CSS file with additional styles."
+                }
+              ]
             },
             "icons": {
               "type": "object",
@@ -464,7 +795,8 @@
                 "^[1-9]\\d*$": {
                   "type": "string"
                 }
-              }
+              },
+              "description": "Icons shown in the Add-ons Manager."
             }
           },
           "required": [

@@ -8,6 +8,7 @@ import themeSchemaObject from 'schema/imported/theme';
 import messagesSchemaObject from 'schema/messages';
 import {
   DEPRECATED_MANIFEST_PROPERTIES,
+  IGNORE_PRIVILEGED_ERRORS,
   MANIFEST_VERSION_DEFAULT,
   SCHEMA_KEYWORDS,
 } from 'const';
@@ -378,9 +379,10 @@ export class SchemaValidator {
 
   get validateLocale() {
     if (!this._localeValidator) {
+      // This conflicts with Thunderbird's message API, so it's now _messages
       this._localeValidator = this._validator.compile({
         ...this.messagesSchemaObject,
-        $id: 'messages',
+        $id: '_messages',
         $ref: '#/types/WebExtensionMessages',
       });
     }
@@ -663,10 +665,13 @@ export class SchemaValidator {
       return true;
     };
 
-    validator.addKeyword({
-      keyword: SCHEMA_KEYWORDS.VALIDATE_PRIVILEGED_PERMISSIONS,
-      validate: validatePrivilegedPermissions,
-    });
+    // We don't care about privileged permissions in Thunderbird..for now.
+    if (!IGNORE_PRIVILEGED_ERRORS) {
+      validator.addKeyword({
+        keyword: SCHEMA_KEYWORDS.VALIDATE_PRIVILEGED_PERMISSIONS,
+        validate: validatePrivilegedPermissions,
+      });
+    }
 
     const validatePrivilegedManifestFields = (
       keywordSchemaValue,
@@ -704,10 +709,13 @@ export class SchemaValidator {
       return false;
     };
 
-    validator.addKeyword({
-      keyword: SCHEMA_KEYWORDS.PRIVILEGED,
-      validate: validatePrivilegedManifestFields,
-    });
+    // We don't care about privileged permissions in Thunderbird..for now.
+    if (!IGNORE_PRIVILEGED_ERRORS) {
+      validator.addKeyword({
+        keyword: SCHEMA_KEYWORDS.PRIVILEGED,
+        validate: validatePrivilegedManifestFields,
+      });
+    }
   }
 
   getPrivilegedPermissionsSet(validator) {

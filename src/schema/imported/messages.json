@@ -1,0 +1,1031 @@
+{
+  "$id": "messages",
+  "permissions": [
+    "messagesRead"
+  ],
+  "events": [
+    {
+      "name": "onUpdated",
+      "type": "function",
+      "description": "Fired when one or more properties of a message have been updated.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageHeader"
+            },
+            {
+              "name": "message"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageProperties"
+            },
+            {
+              "name": "changedProperties"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onMoved",
+      "type": "function",
+      "description": "Fired when messages have been moved.",
+      "permissions": [
+        "accountsRead"
+      ],
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "name": "originalMessages"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "name": "movedMessages"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onCopied",
+      "type": "function",
+      "description": "Fired when messages have been copied.",
+      "permissions": [
+        "accountsRead"
+      ],
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "name": "originalMessages"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "name": "copiedMessages"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onDeleted",
+      "type": "function",
+      "description": "Fired when messages have been permanently deleted.",
+      "permissions": [
+        "accountsRead"
+      ],
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "name": "messages"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onNewMailReceived",
+      "type": "function",
+      "description": "Fired when a new message is received, and has been through junk classification and message filters.",
+      "permissions": [
+        "accountsRead"
+      ],
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "name": "folder"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageList"
+            },
+            {
+              "name": "messages"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "functions": [
+    {
+      "name": "list",
+      "type": "function",
+      "description": "Gets all messages in a folder.",
+      "async": "callback",
+      "permissions": [
+        "accountsRead"
+      ],
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "name": "folder"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/MessageList"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "continueList",
+      "type": "function",
+      "description": "Returns the next chunk of messages in a list. See :doc:`how-to/messageLists` for more information.",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "messageListId",
+          "type": "string"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/MessageList"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "get",
+      "type": "function",
+      "description": "Returns a specified message.",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "messageId",
+          "type": "integer"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/MessageHeader"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "getFull",
+      "type": "function",
+      "description": "Returns a specified message, including all headers and MIME parts. Throws if the message could not be read, for example due to network issues.",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "messageId",
+          "type": "integer"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/MessagePart"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "getRaw",
+      "type": "function",
+      "description": "Returns the unmodified source of a message as a `binary string <|link-binary-string|>`__, which is a simple series of 8-bit values. Throws if the message could not be read, for example due to network issues. If the message contains non-ASCII characters, the body parts in the binary string cannot be read directly and must be decoded according to their character sets. Use :ref:`messages.getFull` to get the correctly decoded parts. Manually decoding the raw message is probably too error-prone, especially if the message contains MIME parts with different character set encodings or attachments.\n\nTo get a readable version of the raw message as it appears in Thunderbird's message source view, it may be sufficient to decode the message according to the character set specified in its main `content-type <|link-content-type|>`__ header (example: <value>text/html; charset=UTF-8</value>) using the following function (see MDN for `supported input encodings <|link-input-encoding|>`__): <literalinclude>includes/messages/decodeBinaryString.js<lang>JavaScript</lang></literalinclude>",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "messageId",
+          "type": "integer"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "listAttachments",
+      "type": "function",
+      "description": "Lists the attachments of a message.",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "messageId",
+          "type": "integer"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/types/MessageAttachment"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "getAttachmentFile",
+      "type": "function",
+      "description": "Gets the content of a :ref:`messages.MessageAttachment` as a |File| object.",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "messageId",
+          "type": "integer"
+        },
+        {
+          "name": "partName",
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+)*$"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "object",
+              "isInstanceOf": "File",
+              "additionalProperties": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "query",
+      "type": "function",
+      "description": "Gets all messages that have the specified properties, or all messages if no properties are specified.",
+      "async": "callback",
+      "parameters": [
+        {
+          "type": "object",
+          "name": "queryInfo",
+          "properties": {
+            "attachment": {
+              "type": "boolean",
+              "description": "If specified, returns only messages with or without attachments."
+            },
+            "author": {
+              "type": "string",
+              "description": "Returns only messages with this value matching the author. The search value is a single email address, a name or a combination (e.g.: <value>Name <user@domain.org></value>). The address part of the search value (if provided) must match the author's address completely. The name part of the search value (if provided) must match the author's name partially. All matches are done case-insensitive."
+            },
+            "body": {
+              "type": "string",
+              "description": "Returns only messages with this value in the body of the mail."
+            },
+            "flagged": {
+              "type": "boolean",
+              "description": "Returns only flagged (or unflagged if false) messages."
+            },
+            "folder": {
+              "allOf": [
+                {
+                  "$ref": "folders#/types/MailFolder"
+                },
+                {
+                  "description": "Returns only messages from the specified folder. The <permission>accountsRead</permission> permission is required."
+                }
+              ]
+            },
+            "fromDate": {
+              "allOf": [
+                {
+                  "$ref": "extensionTypes#/types/Date"
+                },
+                {
+                  "description": "Returns only messages with a date after this value."
+                }
+              ]
+            },
+            "fromMe": {
+              "type": "boolean",
+              "description": "Returns only messages with the author's address matching any configured identity."
+            },
+            "fullText": {
+              "type": "string",
+              "description": "Returns only messages with this value somewhere in the mail (subject, body or author)."
+            },
+            "headerMessageId": {
+              "type": "string",
+              "description": "Returns only messages with a Message-ID header matching this value."
+            },
+            "includeSubFolders": {
+              "type": "boolean",
+              "description": "Search the folder specified by ``queryInfo.folder`` recursively."
+            },
+            "recipients": {
+              "type": "string",
+              "description": "Returns only messages whose recipients match all specified addresses. The search value is a semicolon separated list of email addresses, names or combinations (e.g.: <value>Name <user@domain.org></value>). For a match, all specified addresses must equal a recipient's address completely and all specified names must match a recipient's name partially. All matches are done case-insensitive."
+            },
+            "subject": {
+              "type": "string",
+              "description": "Returns only messages with this value matching the subject."
+            },
+            "tags": {
+              "allOf": [
+                {
+                  "$ref": "#/types/TagsDetail"
+                },
+                {
+                  "description": "Returns only messages with the specified tags. For a list of available tags, call the :ref:`messages.listTags` method."
+                }
+              ]
+            },
+            "toDate": {
+              "allOf": [
+                {
+                  "$ref": "extensionTypes#/types/Date"
+                },
+                {
+                  "description": "Returns only messages with a date before this value."
+                }
+              ]
+            },
+            "toMe": {
+              "type": "boolean",
+              "description": "Returns only messages with at least one recipient address matching any configured identity."
+            },
+            "unread": {
+              "type": "boolean",
+              "description": "Returns only unread (or read if false) messages."
+            }
+          }
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/MessageList"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "update",
+      "type": "function",
+      "description": "Marks or unmarks a message as junk, read, flagged, or tagged. Updating external messages will throw an <em>ExtensionError</em>.",
+      "async": true,
+      "parameters": [
+        {
+          "name": "messageId",
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/MessageProperties"
+            },
+            {
+              "name": "newProperties"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "move",
+      "type": "function",
+      "description": "Moves messages to a specified folder. If the messages cannot be removed from the source folder, they will be copied instead of moved. Moving external messages will throw an <em>ExtensionError</em>.",
+      "async": true,
+      "permissions": [
+        "accountsRead",
+        "messagesMove"
+      ],
+      "parameters": [
+        {
+          "name": "messageIds",
+          "type": "array",
+          "description": "The IDs of the messages to move.",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "name": "destination",
+              "description": "The folder to move the messages to."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "copy",
+      "type": "function",
+      "description": "Copies messages to a specified folder.",
+      "async": true,
+      "permissions": [
+        "accountsRead",
+        "messagesMove"
+      ],
+      "parameters": [
+        {
+          "name": "messageIds",
+          "type": "array",
+          "description": "The IDs of the messages to copy.",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "name": "destination",
+              "description": "The folder to copy the messages to."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "delete",
+      "type": "function",
+      "description": "Deletes messages permanently, or moves them to the trash folder (honoring the account's deletion behavior settings). Deleting external messages will throw an <em>ExtensionError</em>. The ``skipTrash`` parameter allows immediate permanent deletion, bypassing the trash folder.\n**Note**: Consider using :ref:`messages.move` to manually move messages to the account's trash folder, instead of requesting the overly powerful permission to actually delete messages. The account's trash folder can be extracted as follows: <literalinclude>includes/messages/getTrash.js<lang>JavaScript</lang></literalinclude>",
+      "async": true,
+      "permissions": [
+        "messagesDelete"
+      ],
+      "parameters": [
+        {
+          "name": "messageIds",
+          "type": "array",
+          "description": "The IDs of the messages to delete.",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        {
+          "name": "skipTrash",
+          "type": "boolean",
+          "description": "If true, the message will be deleted permanently, regardless of the account's deletion behavior settings.",
+          "optional": true
+        }
+      ]
+    },
+    {
+      "name": "import",
+      "type": "function",
+      "description": "Imports a message into a local Thunderbird folder. To import a message into an IMAP folder, add it to a local folder first and then move it to the IMAP folder.",
+      "async": "callback",
+      "permissions": [
+        "accountsRead",
+        "messagesImport"
+      ],
+      "parameters": [
+        {
+          "name": "file",
+          "type": "object",
+          "isInstanceOf": "File",
+          "additionalProperties": true
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "name": "destination",
+              "description": "The folder to import the messages into."
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageProperties"
+            },
+            {
+              "name": "properties",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "messages#/types/MessageHeader"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "archive",
+      "type": "function",
+      "description": "Archives messages using the current settings. Archiving external messages will throw an <em>ExtensionError</em>.",
+      "async": true,
+      "permissions": [
+        "messagesMove"
+      ],
+      "parameters": [
+        {
+          "name": "messageIds",
+          "type": "array",
+          "description": "The IDs of the messages to archive.",
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      ]
+    },
+    {
+      "name": "listTags",
+      "type": "function",
+      "description": "Returns a list of tags that can be set on messages, and their human-friendly name, colour, and sort order.",
+      "async": "callback",
+      "parameters": [
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/types/MessageTag"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "createTag",
+      "type": "function",
+      "description": "Creates a new message tag. Tagging a message will store the tag's key in the user's message. Throws if the specified tag key is used already.",
+      "async": true,
+      "permissions": [
+        "messagesTags"
+      ],
+      "parameters": [
+        {
+          "type": "string",
+          "name": "key",
+          "description": "Unique tag identifier (must use only alphanumeric characters).",
+          "pattern": "^[$a-zA-Z0-9]+$"
+        },
+        {
+          "type": "string",
+          "name": "tag",
+          "description": "Human-readable tag name."
+        },
+        {
+          "type": "string",
+          "name": "color",
+          "description": "Tag color in hex format (i.e.: #000080 for navy blue)",
+          "pattern": "^#[0-9a-f]{6}"
+        }
+      ]
+    },
+    {
+      "name": "updateTag",
+      "type": "function",
+      "description": "Updates a message tag.",
+      "async": true,
+      "permissions": [
+        "messagesTags"
+      ],
+      "parameters": [
+        {
+          "type": "string",
+          "name": "key",
+          "description": "Unique tag identifier.",
+          "pattern": "^[$a-zA-Z0-9]+$"
+        },
+        {
+          "type": "object",
+          "name": "updateProperties",
+          "properties": {
+            "tag": {
+              "type": "string",
+              "description": "Human-readable tag name."
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-f]{6}",
+              "description": "Tag color in hex format (i.e.: #000080 for navy blue)."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "deleteTag",
+      "type": "function",
+      "description": "Deletes a message tag, removing it from the list of known tags. Its key will not be removed from tagged messages, but they will appear untagged. Recreating a deleted tag, will make all former tagged messages appear tagged again.",
+      "async": true,
+      "permissions": [
+        "messagesTags"
+      ],
+      "parameters": [
+        {
+          "type": "string",
+          "name": "key",
+          "pattern": "^[$a-zA-Z0-9]+$"
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "messagesDelete",
+            "messagesImport",
+            "messagesMove",
+            "messagesRead",
+            "messagesTags"
+          ]
+        }
+      ]
+    }
+  },
+  "refs": {
+    "messages#/definitions/OptionalPermission": {
+      "namespace": "manifest",
+      "type": "OptionalPermission"
+    }
+  },
+  "types": {
+    "MessageHeader": {
+      "type": "object",
+      "description": "Basic information about a message.",
+      "properties": {
+        "author": {
+          "type": "string"
+        },
+        "bccList": {
+          "description": "The Bcc recipients. Not populated for news/nntp messages.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ccList": {
+          "description": "The Cc recipients. Not populated for news/nntp messages.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "date": {
+          "$ref": "extensionTypes#/types/Date"
+        },
+        "external": {
+          "type": "boolean",
+          "description": "Whether this message is a real message or an external message (opened from a file or from an attachment)."
+        },
+        "flagged": {
+          "type": "boolean",
+          "description": "Whether this message is flagged (a.k.a. starred)."
+        },
+        "folder": {
+          "allOf": [
+            {
+              "$ref": "folders#/types/MailFolder"
+            },
+            {
+              "description": "The <permission>accountsRead</permission> permission is required for this property to be included. Not available for external or attached messages."
+            }
+          ]
+        },
+        "headerMessageId": {
+          "type": "string",
+          "description": "The message-id header of the message."
+        },
+        "headersOnly": {
+          "description": "Some account types (for example <value>pop3</value>) allow to download only the headers of the message, but not its body. The body of such messages will not be available.",
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "junk": {
+          "description": "Whether the message has been marked as junk. Always <value>false</value> for news/nntp messages and external messages.",
+          "type": "boolean"
+        },
+        "junkScore": {
+          "type": "integer",
+          "description": "The junk score associated with the message. Always <value>0</value> for news/nntp messages and external messages.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "read": {
+          "type": "boolean",
+          "description": "Whether the message has been marked as read. Not available for external or attached messages."
+        },
+        "new": {
+          "type": "boolean",
+          "description": "Whether the message has been received recently and is marked as new."
+        },
+        "recipients": {
+          "description": "The To recipients. Not populated for news/nntp messages.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "size": {
+          "description": "The total size of the message in bytes.",
+          "type": "integer"
+        },
+        "subject": {
+          "type": "string",
+          "description": "The subject of the message."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tags associated with this message. For a list of available tags, call the listTags method."
+        }
+      },
+      "required": [
+        "author",
+        "bccList",
+        "ccList",
+        "date",
+        "external",
+        "flagged",
+        "headerMessageId",
+        "headersOnly",
+        "id",
+        "junk",
+        "junkScore",
+        "new",
+        "recipients",
+        "size",
+        "subject",
+        "tags"
+      ]
+    },
+    "MessageList": {
+      "type": "object",
+      "description": "See :doc:`how-to/messageLists` for more information.",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/types/MessageHeader"
+          }
+        }
+      },
+      "required": [
+        "messages"
+      ]
+    },
+    "MessagePart": {
+      "type": "object",
+      "description": "Represents an email message \"part\", which could be the whole message",
+      "properties": {
+        "body": {
+          "type": "string",
+          "description": "The content of the part"
+        },
+        "contentType": {
+          "type": "string"
+        },
+        "headers": {
+          "type": "object",
+          "description": "A <em>dictionary object</em> of part headers as <em>key-value</em> pairs, with the header name as <em>key</em>, and an array of headers as <em>value</em>",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the part, if it is a file"
+        },
+        "partName": {
+          "type": "string",
+          "description": "The identifier of this part, used in :ref:`messages.getAttachmentFile`"
+        },
+        "parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/types/MessagePart"
+          },
+          "description": "Any sub-parts of this part"
+        },
+        "size": {
+          "type": "integer",
+          "description": "The size of this part. The size of <em>message/*</em> parts is not the actual message size (on disc), but the total size of its decoded body parts, excluding headers."
+        }
+      }
+    },
+    "MessageProperties": {
+      "type": "object",
+      "description": "Message properties used in :ref:`messages.update` and :ref:`messages.import`. They can also be monitored by :ref:`messages.onUpdated`.",
+      "properties": {
+        "flagged": {
+          "type": "boolean",
+          "description": "Whether the message is flagged (a.k.a starred)."
+        },
+        "junk": {
+          "type": "boolean",
+          "description": "Whether the message is marked as junk. Only supported in :ref:`messages.update`"
+        },
+        "new": {
+          "type": "boolean",
+          "description": "Whether the message is marked as new. Only supported in :ref:`messages.import`"
+        },
+        "read": {
+          "type": "boolean",
+          "description": "Whether the message is marked as read."
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tags associated with this message. For a list of available tags, call the listTags method.",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "MessageTag": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Unique tag identifier."
+        },
+        "tag": {
+          "type": "string",
+          "description": "Human-readable tag name."
+        },
+        "color": {
+          "type": "string",
+          "description": "Tag color."
+        },
+        "ordinal": {
+          "type": "string",
+          "description": "Custom sort string (usually empty)."
+        }
+      },
+      "required": [
+        "key",
+        "tag",
+        "color",
+        "ordinal"
+      ]
+    },
+    "TagsDetail": {
+      "type": "object",
+      "description": "Used for filtering messages by tag in various methods. Note that functions using this type may have a partial implementation.",
+      "properties": {
+        "tags": {
+          "type": "object",
+          "description": "A <em>dictionary object</em> with one or more filter condition as <em>key-value</em> pairs, the <em>key</em> being the tag to filter on, and the <em>value</em> being a boolean expression, requesting whether a message must include (<value>true</value>) or exclude (<value>false</value>) the tag. For a list of available tags, call the :ref:`messages.listTags` method.",
+          "patternProperties": {
+            ".*": {
+              "type": "boolean"
+            }
+          }
+        },
+        "mode": {
+          "type": "string",
+          "description": "Whether all of the tag filters must apply, or any of them.",
+          "enum": [
+            "all",
+            "any"
+          ]
+        }
+      },
+      "required": [
+        "tags",
+        "mode"
+      ]
+    },
+    "MessageAttachment": {
+      "type": "object",
+      "description": "Represents an attachment in a message.",
+      "properties": {
+        "contentType": {
+          "type": "string",
+          "description": "The content type of the attachment."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name, as displayed to the user, of this attachment. This is usually but not always the filename of the attached file."
+        },
+        "partName": {
+          "type": "string",
+          "description": "Identifies the MIME part of the message associated with this attachment."
+        },
+        "size": {
+          "type": "integer",
+          "description": "The size in bytes of this attachment."
+        },
+        "message": {
+          "allOf": [
+            {
+              "$ref": "messages#/types/MessageHeader"
+            },
+            {
+              "description": "A MessageHeader, if this attachment is a message."
+            }
+          ]
+        }
+      },
+      "required": [
+        "contentType",
+        "name",
+        "partName",
+        "size"
+      ]
+    }
+  }
+}

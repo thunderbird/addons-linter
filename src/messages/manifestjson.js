@@ -235,8 +235,8 @@ export const MANIFEST_UPDATE_URL = {
 
 export const MANIFEST_UNUSED_UPDATE = {
   code: 'MANIFEST_UNUSED_UPDATE',
-  message: i18n._('The "update_url" property is not used by Firefox.'),
-  description: i18n._(oneLine`The "update_url" is not used by Firefox in
+  message: i18n._('The "update_url" property is not used by Thunderbird.'),
+  description: i18n._(oneLine`The "update_url" is not used by Thunderbird in
     the root of a manifest; your add-on will be updated via the Add-ons
     site and not your "update_url". See: https://mzl.la/25zqk4O`),
   file: MANIFEST_JSON,
@@ -246,7 +246,7 @@ export const STRICT_MAX_VERSION = {
   code: 'STRICT_MAX_VERSION',
   message: i18n._('"strict_max_version" not required.'),
   description: i18n._(oneLine`"strict_max_version" shouldn't be used unless
-    the add-on is expected not to work with future versions of Firefox.`),
+    the add-on is expected not to work with future versions of Thunderbird.`),
   file: MANIFEST_JSON,
 };
 
@@ -432,7 +432,7 @@ export const MANIFEST_FIELD_DEPRECATED = {
 
 export const MANIFEST_THEME_LWT_ALIAS = {
   code: 'MANIFEST_THEME_LWT_ALIAS',
-  message: i18n._('This theme LWT alias has been removed in Firefox 70.'),
+  message: i18n._('This theme LWT alias has been removed in Thunderbird 70.'),
   description: i18n._(
     'See https://mzl.la/2T11Lkc (MDN Docs) for more information.'
   ),
@@ -570,20 +570,20 @@ export function noMessagesFileInLocales(path) {
   };
 }
 
-export const KEY_FIREFOX_UNSUPPORTED_BY_MIN_VERSION =
-  'KEY_FIREFOX_UNSUPPORTED_BY_MIN_VERSION';
-export function keyFirefoxUnsupportedByMinVersion(
+export const KEY_Thunderbird_UNSUPPORTED_BY_MIN_VERSION =
+  'KEY_Thunderbird_UNSUPPORTED_BY_MIN_VERSION';
+export function keyThunderbirdUnsupportedByMinVersion(
   key,
   minVersion,
   versionAdded
 ) {
   return {
-    code: KEY_FIREFOX_UNSUPPORTED_BY_MIN_VERSION,
+    code: KEY_Thunderbird_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Manifest key not supported by the specified minimum Firefox version'
+      'Manifest key not supported by the specified minimum Thunderbird version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox %(minVersion)s, which
+      i18n._(oneLine`"strict_min_version" requires Thunderbird %(minVersion)s, which
         was released before version %(versionAdded)s introduced support for
         "%(key)s".`),
       { key, minVersion, versionAdded }
@@ -592,20 +592,20 @@ export function keyFirefoxUnsupportedByMinVersion(
   };
 }
 
-export const PERMISSION_FIREFOX_UNSUPPORTED_BY_MIN_VERSION =
-  'PERMISSION_FIREFOX_UNSUPPORTED_BY_MIN_VERSION';
-export function permissionFirefoxUnsupportedByMinVersion(
+export const PERMISSION_Thunderbird_UNSUPPORTED_BY_MIN_VERSION =
+  'PERMISSION_Thunderbird_UNSUPPORTED_BY_MIN_VERSION';
+export function permissionThunderbirdUnsupportedByMinVersion(
   key,
   minVersion,
   versionAdded
 ) {
   return {
-    code: PERMISSION_FIREFOX_UNSUPPORTED_BY_MIN_VERSION,
+    code: PERMISSION_Thunderbird_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Permission not supported by the specified minimum Firefox version'
+      'Permission not supported by the specified minimum Thunderbird version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox %(minVersion)s, which
+      i18n._(oneLine`"strict_min_version" requires Thunderbird %(minVersion)s, which
         was released before version %(versionAdded)s introduced support for
         "%(key)s".`),
       { key, minVersion, versionAdded }
@@ -614,20 +614,20 @@ export function permissionFirefoxUnsupportedByMinVersion(
   };
 }
 
-export const KEY_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION =
-  'KEY_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION';
-export function keyFirefoxAndroidUnsupportedByMinVersion(
+export const KEY_Thunderbird_ANDROID_UNSUPPORTED_BY_MIN_VERSION =
+  'KEY_Thunderbird_ANDROID_UNSUPPORTED_BY_MIN_VERSION';
+export function keyThunderbirdAndroidUnsupportedByMinVersion(
   key,
   minVersion,
   versionAdded
 ) {
   return {
-    code: KEY_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION,
+    code: KEY_Thunderbird_ANDROID_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Manifest key not supported by the specified minimum Firefox for Android version'
+      'Manifest key not supported by the specified minimum Thunderbird for Android version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox for Android
+      i18n._(oneLine`"strict_min_version" requires Thunderbird for Android
         %(minVersion)s, which was released before version %(versionAdded)s
         introduced support for "%(key)s".`),
       { key, minVersion, versionAdded }
@@ -636,20 +636,20 @@ export function keyFirefoxAndroidUnsupportedByMinVersion(
   };
 }
 
-export const PERMISSION_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION =
-  'PERMISSION_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION';
-export function permissionFirefoxAndroidUnsupportedByMinVersion(
+export const PERMISSION_Thunderbird_ANDROID_UNSUPPORTED_BY_MIN_VERSION =
+  'PERMISSION_Thunderbird_ANDROID_UNSUPPORTED_BY_MIN_VERSION';
+export function permissionThunderbirdAndroidUnsupportedByMinVersion(
   key,
   minVersion,
   versionAdded
 ) {
   return {
-    code: PERMISSION_FIREFOX_ANDROID_UNSUPPORTED_BY_MIN_VERSION,
+    code: PERMISSION_Thunderbird_ANDROID_UNSUPPORTED_BY_MIN_VERSION,
     message: i18n._(
-      'Permission not supported by the specified minimum Firefox for Android version'
+      'Permission not supported by the specified minimum Thunderbird for Android version'
     ),
     description: i18n.sprintf(
-      i18n._(oneLine`"strict_min_version" requires Firefox for Android
+      i18n._(oneLine`"strict_min_version" requires Thunderbird for Android
         %(minVersion)s, which was released before version %(versionAdded)s
         introduced support for "%(key)s".`),
       { key, minVersion, versionAdded }
@@ -669,20 +669,20 @@ export const RESTRICTED_HOMEPAGE_URL = {
 
 export const RESTRICTED_PERMISSION = 'RESTRICTED_PERMISSION';
 
-export const makeRestrictedPermission = (permission, minFirefoxVersion) => {
+export const makeRestrictedPermission = (permission, minThunderbirdVersion) => {
   return {
     code: RESTRICTED_PERMISSION,
     message: i18n.sprintf(
       i18n._(oneLine`The "%(permission)s" permission requires
-        "strict_min_version" to be set to "%(minFirefoxVersion)s" or above`),
-      { permission, minFirefoxVersion }
+        "strict_min_version" to be set to "%(minThunderbirdVersion)s" or above`),
+      { permission, minThunderbirdVersion }
     ),
     description: i18n.sprintf(
       i18n._(oneLine`The "%(permission)s" permission requires
-        "strict_min_version" to be set to "%(minFirefoxVersion)s" or above.
-        Please update your manifest.json version to specify a minimum Firefox
+        "strict_min_version" to be set to "%(minThunderbirdVersion)s" or above.
+        Please update your manifest.json version to specify a minimum Thunderbird
         version.`),
-      { permission, minFirefoxVersion }
+      { permission, minThunderbirdVersion }
     ),
     file: MANIFEST_JSON,
   };

@@ -1,0 +1,353 @@
+{
+  "$id": "mailingLists",
+  "permissions": [
+    "addressBooks"
+  ],
+  "functions": [
+    {
+      "name": "list",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/types/MailingListNode"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Gets all the mailing lists in the address book with id ``parentId``."
+    },
+    {
+      "name": "get",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/MailingListNode"
+            }
+          ]
+        }
+      ],
+      "description": "Gets a single mailing list."
+    },
+    {
+      "name": "create",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "name": "properties",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "nickName": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "string",
+              "description": "The ID of the new mailing list."
+            }
+          ]
+        }
+      ],
+      "description": "Creates a new mailing list in the address book with id ``parentId``."
+    },
+    {
+      "name": "update",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "properties",
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "nickName": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "name"
+          ]
+        }
+      ],
+      "description": "Edits the properties of a mailing list."
+    },
+    {
+      "name": "delete",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "description": "Removes the mailing list."
+    },
+    {
+      "name": "addMember",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "contactId",
+          "type": "string"
+        }
+      ],
+      "description": "Adds a contact to the mailing list with id ``id``. If the contact and mailing list are in different address books, the contact will also be copied to the list's address book."
+    },
+    {
+      "name": "listMembers",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "contacts#/types/ContactNode"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Gets all contacts that are members of the mailing list with id ``id``."
+    },
+    {
+      "name": "removeMember",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "contactId",
+          "type": "string"
+        }
+      ],
+      "description": "Removes a contact from the mailing list with id ``id``. This does not delete the contact from the address book."
+    }
+  ],
+  "events": [
+    {
+      "name": "onCreated",
+      "type": "function",
+      "description": "Fired when a mailing list is created.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/MailingListNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onUpdated",
+      "type": "function",
+      "description": "Fired when a mailing list is changed.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/MailingListNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onDeleted",
+      "type": "function",
+      "description": "Fired when a mailing list is deleted.",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "onMemberAdded",
+      "type": "function",
+      "description": "Fired when a contact is added to the mailing list.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "contacts#/types/ContactNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onMemberRemoved",
+      "type": "function",
+      "description": "Fired when a contact is removed from the mailing list.",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "addressBooks"
+          ]
+        }
+      ]
+    }
+  },
+  "refs": {
+    "mailingLists#/definitions/OptionalPermission": {
+      "namespace": "manifest",
+      "type": "OptionalPermission"
+    }
+  },
+  "types": {
+    "MailingListNode": {
+      "type": "object",
+      "description": "A node representing a mailing list.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the program is restarted."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "The ``id`` of the parent object."
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "addressBooks#/types/NodeType"
+            },
+            {
+              "description": "Always set to <value>mailingList</value>."
+            }
+          ]
+        },
+        "readOnly": {
+          "type": "boolean",
+          "description": "Indicates if the object is read-only."
+        },
+        "remote": {
+          "type": "boolean",
+          "description": "Indicates if the object came from a remote address book."
+        },
+        "name": {
+          "type": "string"
+        },
+        "nickName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "contacts#/types/ContactNode"
+          },
+          "description": "A list of contacts held by this node's address book or mailing list."
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "name",
+        "nickName",
+        "description"
+      ]
+    }
+  }
+}

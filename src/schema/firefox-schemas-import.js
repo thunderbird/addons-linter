@@ -38,6 +38,8 @@ const schemaRegexes = [
   new RegExp('browser/components/extensions/schemas/.*\\.json'),
   // eslint-disable-next-line prefer-regex-literals
   new RegExp('toolkit/components/extensions/schemas/.*\\.json'),
+  // eslint-disable-next-line prefer-regex-literals
+  new RegExp('comm/mail/components/extensions/schemas/.*\\.json'),
 ];
 
 export const refMap = {
@@ -253,6 +255,7 @@ inner.updateWithAddonsLinterData = (firefoxSchemas, ourSchemas) => {
   Object.keys(ourSchemas).forEach((namespace) => {
     const firefoxSchema = firefoxSchemas[namespace];
     const { file, ...ourSchema } = ourSchemas[namespace];
+
     // Allow overriding the namespace if `file` is set, this supports "$import".
     if (file) {
       schemas[ourSchema.id || namespace] = {
@@ -552,6 +555,7 @@ inner.normalizeSchema = (schemas, file) => {
       if (typeof $import !== 'string') {
         return {};
       }
+
       // menus.json and browser_action.json contain the definition of two API
       // namespaces, one just import the other one defined in the same file
       // (e.g. "contextMenus" imports "menus", "browser_action" imports "action"),

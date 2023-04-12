@@ -1,0 +1,414 @@
+{
+  "$id": "contacts",
+  "permissions": [
+    "addressBooks"
+  ],
+  "functions": [
+    {
+      "name": "list",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/types/ContactNode"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Gets all the contacts in the address book with the id ``parentId``."
+    },
+    {
+      "name": "quickSearch",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string",
+          "optional": true,
+          "description": "The id of the address book to search. If not specified, all address books are searched."
+        },
+        {
+          "name": "queryInfo",
+          "description": "Either a <em>string</em> with one or more space-separated terms to search for, or a complex :ref:`contacts.QueryInfo` search query.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "$ref": "#/types/QueryInfo"
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/types/ContactNode"
+              }
+            }
+          ]
+        }
+      ],
+      "description": "Gets all contacts matching ``queryInfo`` in the address book with the id ``parentId``."
+    },
+    {
+      "name": "get",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "$ref": "#/types/ContactNode"
+            }
+          ]
+        }
+      ],
+      "description": "Gets a single contact."
+    },
+    {
+      "name": "getPhoto",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "object",
+              "optional": true,
+              "isInstanceOf": "File",
+              "additionalProperties": true
+            }
+          ]
+        }
+      ],
+      "description": "Gets the photo associated with this contact, if any."
+    },
+    {
+      "name": "setPhoto",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "file",
+          "type": "object",
+          "isInstanceOf": "File",
+          "additionalProperties": true
+        }
+      ],
+      "description": "Sets the photo associated with this contact."
+    },
+    {
+      "name": "create",
+      "type": "function",
+      "async": "callback",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "description": "Assigns the contact an id. If an existing contact has this id, an exception is thrown. **Note:** Deprecated, the card's id should be specified in the vCard string instead.",
+          "optional": true
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactProperties"
+            },
+            {
+              "name": "properties",
+              "description": "The properties object for the new contact. If it includes a ``vCard`` member, all specified `legacy properties <|link-legacy-properties|>`__ are ignored and the new contact will be based on the provided vCard string. If a UID is specified in the vCard string, which is already used by another contact, an exception is thrown. **Note:** Using individual properties is deprecated, use the ``vCard`` member instead."
+            }
+          ]
+        },
+        {
+          "type": "function",
+          "name": "callback",
+          "optional": true,
+          "parameters": [
+            {
+              "type": "string",
+              "description": "The ID of the new contact."
+            }
+          ]
+        }
+      ],
+      "description": "Adds a new contact to the address book with the id ``parentId``."
+    },
+    {
+      "name": "update",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactProperties"
+            },
+            {
+              "name": "properties",
+              "description": "An object with properties to update the specified contact. Individual properties are removed, if they are set to <value>null</value>. If the provided object includes a ``vCard`` member, all specified `legacy properties <|link-legacy-properties|>`__ are ignored and the details of the contact will be replaced by the provided vCard. Changes to the UID will be ignored. **Note:** Using individual properties is deprecated, use the ``vCard`` member instead. "
+            }
+          ]
+        }
+      ],
+      "description": "Updates a contact."
+    },
+    {
+      "name": "delete",
+      "type": "function",
+      "async": true,
+      "parameters": [
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ],
+      "description": "Removes a contact from the address book. The contact is also removed from any mailing lists it is a member of."
+    }
+  ],
+  "events": [
+    {
+      "name": "onCreated",
+      "type": "function",
+      "description": "Fired when a contact is created.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onUpdated",
+      "type": "function",
+      "description": "Fired when a contact is changed.",
+      "parameters": [
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/ContactNode"
+            },
+            {
+              "name": "node"
+            }
+          ]
+        },
+        {
+          "allOf": [
+            {
+              "$ref": "#/types/PropertyChange"
+            },
+            {
+              "name": "changedProperties"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "onDeleted",
+      "type": "function",
+      "description": "Fired when a contact is removed from an address book.",
+      "parameters": [
+        {
+          "name": "parentId",
+          "type": "string"
+        },
+        {
+          "name": "id",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "definitions": {
+    "OptionalPermission": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "addressBooks"
+          ]
+        }
+      ]
+    }
+  },
+  "refs": {
+    "contacts#/definitions/OptionalPermission": {
+      "namespace": "manifest",
+      "type": "OptionalPermission"
+    }
+  },
+  "types": {
+    "QueryInfo": {
+      "description": "Object defining a query for :ref:`contacts.quickSearch`.",
+      "type": "object",
+      "properties": {
+        "searchString": {
+          "type": "string",
+          "description": "One or more space-separated terms to search for."
+        },
+        "includeLocal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include results from local address books. Defaults to true."
+        },
+        "includeRemote": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include results from remote address books. Defaults to true."
+        },
+        "includeReadOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include results from read-only address books. Defaults to true."
+        },
+        "includeReadWrite": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to include results from read-write address books. Defaults to true."
+        }
+      }
+    },
+    "ContactNode": {
+      "type": "object",
+      "description": "A node representing a contact in an address book.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the node. IDs are unique within the current profile, and they remain valid even after the program is restarted."
+        },
+        "parentId": {
+          "type": "string",
+          "description": "The ``id`` of the parent object."
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "addressBooks#/types/NodeType"
+            },
+            {
+              "description": "Always set to <value>contact</value>."
+            }
+          ]
+        },
+        "readOnly": {
+          "type": "boolean",
+          "description": "Indicates if the object is read-only."
+        },
+        "remote": {
+          "type": "boolean",
+          "description": "Indicates if the object came from a remote address book."
+        },
+        "properties": {
+          "$ref": "#/types/ContactProperties"
+        }
+      },
+      "required": [
+        "id",
+        "type",
+        "properties"
+      ]
+    },
+    "ContactProperties": {
+      "type": "object",
+      "description": "A set of individual properties for a particular contact, and its vCard string. Further information can be found in :ref:`howto_contacts`.",
+      "patternProperties": {
+        "^\\w+$": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "PropertyChange": {
+      "type": "object",
+      "description": "A dictionary of changed properties. Keys are the property name that changed, values are an object containing ``oldValue`` and ``newValue``. Values can be either a string or <value>null</value>.",
+      "patternProperties": {
+        "^\\w+$": {
+          "type": "object",
+          "properties": {
+            "oldValue": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "newValue": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          },
+          "required": [
+            "oldValue",
+            "newValue"
+          ]
+        }
+      }
+    }
+  }
+}

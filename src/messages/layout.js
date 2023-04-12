@@ -23,7 +23,7 @@ export const INVALID_XPI_ENTRY = {
   message: 'Invalid ZIP file entry',
   description: i18n._(oneLine`The package is invalid. It may contain
     entries using invalid characters, as an example using '\\' as a
-    path separator is not allowed in Firefox. Try to recreate your
+    path separator is not allowed in Thunderbird. Try to recreate your
     add-on package (ZIP) and make sure all entries are using '/' as the
     path separator.`),
 };
@@ -95,7 +95,7 @@ export const ALREADY_SIGNED = {
 
 export const COINMINER_USAGE_DETECTED = {
   code: 'COINMINER_USAGE_DETECTED',
-  message: i18n._('Firefox add-ons are not allowed to run coin miners.'),
+  message: i18n._('Thunderbird add-ons are not allowed to run coin miners.'),
   description: i18n._(oneLine`We do not allow coinminer scripts to be run inside
     WebExtensions.
     See https://github.com/mozilla/addons-linter/issues/1643 for more
